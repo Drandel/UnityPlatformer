@@ -41,6 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8901616607181413981}
   - component: {fileID: 2562457741035631240}
+  - component: {fileID: 3506986901758651068}
   m_Layer: 0
   m_Name: Alien
   m_TagString: Untagged
@@ -115,6 +116,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &3506986901758651068
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6131765999523680765}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 7b8f5e0593b297a469598a6e454c7d37, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &9023779327899783232
 GameObject:
   m_ObjectHideFlags: 0
@@ -143,7 +165,7 @@ Transform:
   m_GameObject: {fileID: 9023779327899783232}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -5.4743457, y: -0.13309997, z: -0.021523252}
+  m_LocalPosition: {x: -4.86, y: -0.1, z: -0.021523252}
   m_LocalScale: {x: -1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -213,10 +235,10 @@ BoxCollider2D:
   m_Offset: {x: -0.025616407, y: -0.0153698325}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 10.24, y: 10.24}
+    newSize: {x: 10.24, y: 10.24}
+    adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
@@ -235,13 +257,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab10e007deb19ac499dc02becd91d06d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pointA: {fileID: 0}
-  pointB: {fileID: 0}
-  speed: 1.5
-  detectionRadius: 6.5
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 64
+  patrolSpeed: 2
+  patrolRadius: 2.76
+  detectionRadius: 3.33
+  pauseDuration: 2
   projectilePrefab: {fileID: 3094273435870399798, guid: 750d9b77ce9ab854c96ee2e7ac359ded, type: 3}
   firePoint: {fileID: 6440981251032595268}
   fireRate: 0.5
