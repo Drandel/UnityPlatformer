@@ -31,6 +31,14 @@ public class CharacterController : MonoBehaviour
         
     }
 
+    public void damageResponse(Vector2 contactPoint){
+        if (contactPoint.x > transform.position.x){
+            rb.AddForce(new Vector2(-20,0.0f),ForceMode2D.Impulse);
+        }else if (contactPoint.x < transform.position.x){
+            rb.AddForce(new Vector2(20,0.0f),ForceMode2D.Impulse);
+        }
+    }
+
     private void FixedUpdate(){ // using fixed update for physics reasons
         float moveInput = Input.GetAxisRaw("Horizontal");
 

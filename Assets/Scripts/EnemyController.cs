@@ -12,6 +12,7 @@ public class Enemy : MonoBehaviour
     private Vector2 patrolPoint;
     private enum EnemyState { Patrolling, Attacking }
     private EnemyState currentState;
+    public float Damage = 10f;
 
     void Start()
     {
@@ -84,5 +85,13 @@ public class Enemy : MonoBehaviour
         // Draw attack radius as red circle
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, attackRadius);
+    }
+    void OnCollisionEnter2D(Collision2D col)
+    {
+        // Debug.Log(col.gameObject.tag);
+        if(col.gameObject.CompareTag("Player")){
+            col.gameObject.GetComponent<HealthController>().damageTaken(Damage);
+            col.gameObject.GetComponent<CharacterController>().damageResponse(col.contacts[0].point);
+        }
     }
 }
