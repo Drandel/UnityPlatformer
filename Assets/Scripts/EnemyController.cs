@@ -1,87 +1,88 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class EnemyController : MonoBehaviour
+public class Enemy : MonoBehaviour
 {
-    public GameObject pointA;
-    public GameObject pointB;
-    private Rigidbody2D rb;
-    private Transform currentPoint;
-    public float speed = 2f;
-    public float detectionRadius = 15f;
-    private bool canMove = true;
-    public Status status = Status.Attacking; 
-    public LayerMask playerLayer;
-    public GameObject projectilePrefab;
-    public Transform firePoint;
-    public float fireRate = 2f;
-    private float nextFireTime = 0f;
-    Animator anim;
+    public float patrolSpeed = 2f;
+    public float attackSpeed = 4f;
+    public float patrolRadius = 10f;
+    public float attackRadius = 5f;
 
+    private Transform player;
+    private Rigidbody2D rb;
+    private Vector2 patrolPoint;
+    private enum EnemyState { Patrolling, Attacking }
+    private EnemyState currentState;
 
     void Start()
     {
-        anim = GetComponentInChildren<Animator>();
+        player = GameObject.FindGameObjectWithTag("Player").transform;
         rb = GetComponent<Rigidbody2D>();
-        currentPoint = pointA.transform;
-            anim.SetBool("isWalking", true);
+        currentState = EnemyState.Patrolling;
+        // Initial patrol point
+        SetPatrolPoint();
     }
 
     void Update()
     {
-        if(status == Status.Patrolling){
-            if(canMove){
-                if(currentPoint == pointB.transform )
-                {
-                    rb.velocity = new Vector2(speed, 0);
-                } else {
-                    rb.velocity = new Vector2(-speed, 0);
-                }
-            }
+        switch (currentState)
+        {
+            case EnemyState.Patrolling:
+                Patrol();
+                CheckForPlayer();
+                break;
+            case EnemyState.Attacking:
+                Attack();
+                break;
         }
-
-        if(status == Status.Attacking) {
-            anim.SetBool("isWalking", false);
-            Debug.Log(Time.time >= nextFireTime);
-            if (Time.time >= nextFireTime)
-            {
-                Shoot();
-                nextFireTime = Time.time + 1f / fireRate;
-            }
-        }
-
     }
 
-    void Shoot()
+    void Patrol()
     {
-        Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
-    }
+        // Move towards patrol point
+        Vector2 moveDirection = (patrolPoint - (Vector2)transform.position).normalized;
+        rb.velocity = moveDirection * patrolSpeed;
 
-    private void OnTriggerEnter2D(Collider2D other) {
-        if(other.CompareTag("PatrolPoint")){
-            if(status == Status.Patrolling)
-            {
-                currentPoint = currentPoint == pointA.transform ? pointB.transform : pointA.transform;
-                canMove = false;
-                anim.SetBool("isWalking", false);
-                StartCoroutine(waitCoroutine());
-            }
+        // If reached patrol point, set a new one
+        if (Vector2.Distance(transform.position, patrolPoint) < 0.1f)
+        {
+            SetPatrolPoint();
         }
     }
 
-
-    IEnumerator waitCoroutine(){
-        yield return new WaitForSeconds(2);
-        anim.SetBool("isWalking", true);
-        canMove = true;
-        var scale = gameObject.transform.localScale;
-        gameObject.transform.localScale = new Vector3(scale.x * -1, scale.y, scale.z);
+    void SetPatrolPoint()
+    {
+        // Randomly set a new patrol point within patrol radius
+        float randomAngle = Random.Range(0f, Mathf.PI * 2f);
+        float xOffset = Mathf.Cos(randomAngle) * patrolRadius;
+        float yOffset = Mathf.Sin(randomAngle) * patrolRadius;
+        patrolPoint = (Vector2)transform.position + new Vector2(xOffset, yOffset);
     }
-}
 
-public enum Status {
-    Patrolling,
-    Attacking
+    void CheckForPlayer()
+    {
+        // If player is within attack radius, switch to attacking state
+        if (Vector2.Distance(transform.position, player.position) < attackRadius)
+        {
+            currentState = EnemyState.Attacking;
+        }
+    }
+
+    void Attack()
+    {
+        // Move towards player and attack
+        Vector2 moveDirection = ((Vector2)player.position - (Vector2)transform.position).normalized;
+        rb.velocity = moveDirection * attackSpeed;
+        // Implement your attacking logic here
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        // Draw patrol radius as blue circle
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(transform.position, patrolRadius);
+
+        // Draw attack radius as red circle
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, attackRadius);
+    }
 }
