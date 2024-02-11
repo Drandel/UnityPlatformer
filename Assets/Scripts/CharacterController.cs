@@ -17,6 +17,7 @@ public class CharacterController : MonoBehaviour
     
 
 
+
     void Start()
     {
     rb = GetComponent<Rigidbody2D>();
@@ -25,11 +26,19 @@ public class CharacterController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
+    }
+
+    private void FixedUpdate(){ // using fixed update for physics reasons
         float moveInput = Input.GetAxisRaw("Horizontal");
+
+        handlePlayerLookDirection(moveInput);
+
+
         if (moveInput != 0)
         {
             rb.AddForce(new Vector2(moveInput * walkAcceleration * Time.deltaTime,0.0f),ForceMode2D.Impulse);
-            Debug.Log("Walk: " +  velocity.x);
+            // Debug.Log("Walk: " +  velocity.x);
         }
         else
         {
@@ -42,11 +51,30 @@ public class CharacterController : MonoBehaviour
         }
     }
 
+    private void handlePlayerLookDirection(float moveInput)
+    {
+        if(moveInput > 0){ // if moving right
+                // rotate character along y axis to face right
+                Vector3 rotation = new Vector3(transform.rotation.x, 0f, transform.rotation.z);
+                transform.rotation = Quaternion.Euler(rotation); 
+        } else if(moveInput < 0) { // moving left
+                // rotate character along y axis to face left
+                Vector3 rotation = new Vector3(transform.rotation.x, 180f, transform.rotation.z);
+                transform.rotation = Quaternion.Euler(rotation); 
+        }
+    }
+
     void OnCollisionEnter2D(Collision2D col)
     {
-        Debug.Log(col.gameObject.tag);
+        // Debug.Log(col.gameObject.tag);
         if(col.gameObject.CompareTag("Ground")){
             grounded = true;
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D col) {
+        if(col.gameObject.CompareTag("Ground")){
+            grounded = false;
         }
     }
 }
