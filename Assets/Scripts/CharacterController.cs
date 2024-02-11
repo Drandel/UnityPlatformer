@@ -34,7 +34,7 @@ public class CharacterController : MonoBehaviour
     private void FixedUpdate(){ // using fixed update for physics reasons
         float moveInput = Input.GetAxisRaw("Horizontal");
 
-        handlePlayerLookDirection(moveInput);
+        handlePlayerLookDirection();
 
 
         if (moveInput != 0)
@@ -56,13 +56,14 @@ public class CharacterController : MonoBehaviour
         }
     }
 
-    private void handlePlayerLookDirection(float moveInput)
+    private void handlePlayerLookDirection()
     {
-        if(moveInput > 0){ // if moving right
+
+        if(Camera.main.ScreenToWorldPoint(Input.mousePosition).x > transform.position.x){ // if moving right
                 // rotate character along y axis to face right
                 Vector3 rotation = new Vector3(transform.rotation.x, 0f, transform.rotation.z);
                 transform.rotation = Quaternion.Euler(rotation); 
-        } else if(moveInput < 0) { // moving left
+        } else if(Camera.main.ScreenToWorldPoint(Input.mousePosition).x < transform.position.x) { // moving left
                 // rotate character along y axis to face left
                 Vector3 rotation = new Vector3(transform.rotation.x, 180f, transform.rotation.z);
                 transform.rotation = Quaternion.Euler(rotation); 
