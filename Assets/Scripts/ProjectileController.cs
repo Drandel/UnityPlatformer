@@ -19,6 +19,7 @@ public class ProjectileController : MonoBehaviour
 
     private void Start() {
         rb = GetComponent<Rigidbody2D>();
+        target = GameObject.FindWithTag("Player").transform;
     }
 
     private void FixedUpdate() {
@@ -32,11 +33,6 @@ public class ProjectileController : MonoBehaviour
 
         rb.velocity = transform.right * speed;
     }
-
-    // void Update()
-    // {
-    //     transform.Translate(Vector3.right * speed * Time.deltaTime);
-    // }
 
     private void OnCollisionEnter2D(Collision2D other) {
         // // Check if the projectile collides with something
