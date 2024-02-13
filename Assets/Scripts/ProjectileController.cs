@@ -34,13 +34,17 @@ public class ProjectileController : MonoBehaviour
         rb.velocity = transform.right * speed;
     }
 
+
     private void OnCollisionEnter2D(Collision2D other) {
         // // Check if the projectile collides with something
         if (other.gameObject.CompareTag("Player"))
         {
             // ToDo Deal damage to the player and explode
             // Destroy the projectile
+            other.gameObject.GetComponent<HealthController>().damageTaken(damage);
+            other.gameObject.GetComponent<CharacterController>().damageResponse(other.contacts[0].point);
             explode();
+
             Destroy(gameObject);
         }
 

@@ -17,6 +17,7 @@ public class Enemy : MonoBehaviour
 
     private enum EnemyState { Patrolling, Pausing, Attacking }
     private EnemyState currentState;
+    public float damage = 10f;
     Animator anim;
     public GameObject projectilePrefab;
     public Transform firePoint;
@@ -128,5 +129,13 @@ public class Enemy : MonoBehaviour
 
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, detectionRadius);
+    }
+    void OnCollisionEnter2D(Collision2D col)
+    {
+        // Debug.Log(col.gameObject.tag);
+        if(col.gameObject.CompareTag("Player")){
+            col.gameObject.GetComponent<HealthController>().damageTaken(damage);
+            col.gameObject.GetComponent<CharacterController>().damageResponse(col.contacts[0].point);
+        }
     }
 }
