@@ -5,18 +5,44 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 public class BulletController : MonoBehaviour
-{
-private void OnCollisionEnter2D(Collision2D other) {
-        // // Check if the projectile collides with something
-        if (other.gameObject.CompareTag("Ground"))
+{   
+    public AudioClip shootSound;
+    public AudioClip hitSound;
+    public AudioSource audioSource;
+    private bool hasHit = false;
+    private Rigidbody2D rb;
+    private Collider2D coll;
+    private SpriteRenderer spriteRenderer;
+    public float damage = 10f;
+
+    private void Start() {
+        rb = GetComponent<Rigidbody2D>();
+        coll = GetComponent<Collider2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        audioSource = GetComponent<AudioSource>();
+        audioSource.PlayOneShot(shootSound);
+    }
+
+    private void OnCollisionEnter2D(Collision2D other) {
+        if (!hasHit && other.gameObject.CompareTag("Ground"))
         {
-            Destroy(gameObject);
+            // Play the hit sound effect
+            audioSource.PlayOneShot(hitSound);
+            hasHit = true;
+            rb.velocity = Vector2.zero; // Stop the bullet's movement
+            coll.enabled = false; // Disable the collider
+            spriteRenderer.enabled = false; // Disable the sprite renderer
+            // Optionally, you can also add particle effects, visual effects, or other actions here
+            
+            // Delayed destruction
+            Destroy(gameObject, hitSound.length); // Destroy the GameObject after the sound finishes playing
         }
 
-        if (other.gameObject.CompareTag("Ground"))
-        {
-            // Destroy the projectile
+         if (!hasHit && other.gameObject.CompareTag("Enemy")){
+            HealthController enemyHealth = other.gameObject.GetComponent<HealthController>();
+            enemyHealth.damageTaken(damage);
             Destroy(gameObject);
-        }
+         }
     }
 }
+
