@@ -76,7 +76,7 @@ public class Enemy : MonoBehaviour
 
     private void flipCharacter()
     {
-        if(transform.rotation.y == 180f){
+        if(transform.rotation.eulerAngles.y == 180f){
             Vector3 rotation = new Vector3(transform.rotation.x, 0f, transform.rotation.z);
             transform.rotation = Quaternion.Euler(rotation);
         } else {
@@ -118,7 +118,6 @@ public class Enemy : MonoBehaviour
         if (Vector2.Distance(transform.position, player.position) <= detectionRadius)
         {
             currentState = EnemyState.Attacking;
-            Debug.Log("Player detected!");
         }
     }
 

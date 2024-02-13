@@ -16,14 +16,15 @@ public class CharacterController : MonoBehaviour
     private bool grounded = false;
     public Rigidbody2D rb;
     Animator anim;
-    
-
+    private AudioSource audioSource;
+    public AudioClip jumpSound;
 
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -62,6 +63,7 @@ public class CharacterController : MonoBehaviour
             rb.AddForce(new Vector2(0.0f,1.0f) * jumpAcceleration, ForceMode2D.Impulse);
             grounded = false;
             anim.SetBool("isFalling", true);
+            audioSource.PlayOneShot(jumpSound);
         }
     }
 

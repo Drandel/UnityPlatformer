@@ -14,12 +14,16 @@ public class ProjectileController : MonoBehaviour
     public Transform target;
     public GameObject explosionEffect;
     private Rigidbody2D rb;
+    private AudioSource audioSource;
+    public AudioClip missileSound;
 
 
 
     private void Start() {
         rb = GetComponent<Rigidbody2D>();
         target = GameObject.FindWithTag("Player").transform;
+        audioSource = GetComponent<AudioSource>();
+        audioSource.PlayOneShot(missileSound);
     }
 
     private void FixedUpdate() {
