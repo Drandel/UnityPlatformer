@@ -14,9 +14,10 @@ GameObject:
   - component: {fileID: 2856409442885328698}
   - component: {fileID: 2479252649772033941}
   - component: {fileID: -119851953475217244}
+  - component: {fileID: -6842397977216844782}
   m_Layer: 0
   m_Name: AlienMissile
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -274,3 +275,16 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &-6842397977216844782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3094273435870399798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ec22aa506da4de4e8bea6652fd5b37d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Health: 1

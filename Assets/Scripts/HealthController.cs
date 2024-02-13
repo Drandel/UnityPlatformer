@@ -14,6 +14,6 @@ public class HealthController : MonoBehaviour
     }
 
     private void terminal(){
-
+        Destroy(gameObject);
     }
 }
