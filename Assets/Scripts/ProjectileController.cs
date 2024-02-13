@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -27,15 +28,17 @@ public class ProjectileController : MonoBehaviour
     }
 
     private void FixedUpdate() {
-        Vector2 direction = (Vector2)target.position - rb.position;
 
-        direction.Normalize();
+            Vector2 direction = (Vector2)target.position - rb.position;
 
-        float rotationAmount = Vector3.Cross(direction, transform.right).z;
+            direction.Normalize();
 
-        rb.angularVelocity = -rotationAmount * rotateSpeed;
+            float rotationAmount = Vector3.Cross(direction, transform.right).z;
 
-        rb.velocity = transform.right * speed;
+            rb.angularVelocity = -rotationAmount * rotateSpeed;
+
+            rb.velocity = transform.right * speed;
+
     }
 
 
