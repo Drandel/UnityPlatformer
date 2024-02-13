@@ -12,6 +12,7 @@ public class CharacterController : MonoBehaviour
     public float maxSpeed = 40f;
     public float speed = 1f;
     public float jumpAcceleration = 25.0f;
+    public float damageKnockback = 6.0f;
     private bool grounded = false;
     public Rigidbody2D rb;
     Animator anim;
@@ -33,9 +34,9 @@ public class CharacterController : MonoBehaviour
 
     public void damageResponse(Vector2 contactPoint){
         if (contactPoint.x > transform.position.x){
-            rb.AddForce(new Vector2(-20,0.0f),ForceMode2D.Impulse);
+            rb.AddForce(new Vector2(-damageKnockback,0.0f),ForceMode2D.Impulse);
         }else if (contactPoint.x < transform.position.x){
-            rb.AddForce(new Vector2(20,0.0f),ForceMode2D.Impulse);
+            rb.AddForce(new Vector2(damageKnockback,0.0f),ForceMode2D.Impulse);
         }
     }
 

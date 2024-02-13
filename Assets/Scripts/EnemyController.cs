@@ -17,7 +17,7 @@ public class Enemy : MonoBehaviour
 
     private enum EnemyState { Patrolling, Pausing, Attacking }
     private EnemyState currentState;
-    public float Damage = 10f;
+    public float damage = 10f;
     Animator anim;
     public GameObject projectilePrefab;
     public Transform firePoint;
@@ -134,7 +134,7 @@ public class Enemy : MonoBehaviour
     {
         // Debug.Log(col.gameObject.tag);
         if(col.gameObject.CompareTag("Player")){
-            col.gameObject.GetComponent<HealthController>().damageTaken(Damage);
+            col.gameObject.GetComponent<HealthController>().damageTaken(damage);
             col.gameObject.GetComponent<CharacterController>().damageResponse(col.contacts[0].point);
         }
     }
