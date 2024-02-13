@@ -102,7 +102,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 4
   rotateSpeed: 200
-  damage: 1
+  damage: 10
   target: {fileID: 0}
   explosionEffect: {fileID: 1828176872806910, guid: 64891a0eb28db934898420d80ca07cb3, type: 3}
   missileSound: {fileID: 8300000, guid: b80961360cf590a4c85a37510583a94e, type: 3}

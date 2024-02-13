@@ -24,13 +24,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1368412198801396049}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0, z: -0.9471832, w: 0.32069308}
-  m_LocalPosition: {x: -0.05000019, y: 1.049, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
+  m_LocalPosition: {x: 0.12, y: 1.05, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4024294432111263566}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -142.59}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
 --- !u!1 &6131765999523680765
 GameObject:
   m_ObjectHideFlags: 0
@@ -57,13 +57,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6131765999523680765}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4024294432111263566}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!212 &2562457741035631240
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -149,9 +149,10 @@ GameObject:
   - component: {fileID: 5456653068039707881}
   - component: {fileID: 8753111895313462282}
   - component: {fileID: 842992772854384382}
+  - component: {fileID: 5241830220571224413}
   m_Layer: 0
   m_Name: Enemy
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -164,9 +165,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9023779327899783232}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -4.86, y: -0.1, z: -0.021523252}
-  m_LocalScale: {x: -1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8901616607181413981}
@@ -258,9 +259,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   patrolSpeed: 2
-  patrolRadius: 2.76
-  detectionRadius: 3.33
+  patrolRadius: 4.26
+  detectionRadius: 4.4
   pauseDuration: 2
+  damage: 10
   projectilePrefab: {fileID: 3094273435870399798, guid: 750d9b77ce9ab854c96ee2e7ac359ded, type: 3}
   firePoint: {fileID: 6440981251032595268}
   fireRate: 0.5
+--- !u!114 &5241830220571224413
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9023779327899783232}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ec22aa506da4de4e8bea6652fd5b37d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Health: 100
