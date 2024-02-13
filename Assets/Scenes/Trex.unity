@@ -1629,6 +1629,7 @@ GameObject:
   - component: {fileID: 454292657}
   - component: {fileID: 454292658}
   - component: {fileID: 454292659}
+  - component: {fileID: 454292660}
   m_Layer: 0
   m_Name: DinoGuy
   m_TagString: Player
@@ -1723,6 +1724,7 @@ MonoBehaviour:
   speed: 1
   jumpAcceleration: 8
   rb: {fileID: 454292657}
+  jumpSound: {fileID: 8300000, guid: 5a6c408f3fdcd424b8fe5d01bc176acf, type: 3}
 --- !u!50 &454292657
 Rigidbody2D:
   serializedVersion: 4
@@ -8514,11 +8516,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 842992772854384382, guid: 78746f2732b07e54fb0f219b3df4a3e8, type: 3}
       propertyPath: patrolRadius
-      value: 2.87
+      value: 4.26
       objectReference: {fileID: 0}
     - target: {fileID: 842992772854384382, guid: 78746f2732b07e54fb0f219b3df4a3e8, type: 3}
       propertyPath: detectionRadius
-      value: 6.95
+      value: 4.4
       objectReference: {fileID: 0}
     - target: {fileID: 4024294432111263566, guid: 78746f2732b07e54fb0f219b3df4a3e8, type: 3}
       propertyPath: m_LocalScale.x
@@ -8526,11 +8528,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4024294432111263566, guid: 78746f2732b07e54fb0f219b3df4a3e8, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -4.86
+      value: 3.79
       objectReference: {fileID: 0}
     - target: {fileID: 4024294432111263566, guid: 78746f2732b07e54fb0f219b3df4a3e8, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.1
+      value: -1.97
       objectReference: {fileID: 0}
     - target: {fileID: 4024294432111263566, guid: 78746f2732b07e54fb0f219b3df4a3e8, type: 3}
       propertyPath: m_LocalPosition.z
