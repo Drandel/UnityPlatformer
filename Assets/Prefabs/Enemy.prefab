@@ -262,11 +262,12 @@ MonoBehaviour:
   patrolRadius: 2.6
   detectionRadius: 4.64
   pauseDuration: 2
-  damage: 10
+  damage: 100
   projectilePrefab: {fileID: 3094273435870399798, guid: 750d9b77ce9ab854c96ee2e7ac359ded, type: 3}
   firePoint: {fileID: 6440981251032595268}
   fireRate: 0.5
   explosionEffect: {fileID: 1329845292236604, guid: 9bba9cf244c53c5439505dfc96fdd11c, type: 3}
+  aggroIcon: {fileID: 1683519749643334281, guid: f2ffc540775470f44b617b34ef5aa27b, type: 3}
 --- !u!114 &5241830220571224413
 MonoBehaviour:
   m_ObjectHideFlags: 0

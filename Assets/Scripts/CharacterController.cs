@@ -18,6 +18,7 @@ public class CharacterController : MonoBehaviour
     Animator anim;
     private AudioSource audioSource;
     public AudioClip jumpSound;
+    Vector3 respawnPoint;
 
 
     void Start()
@@ -94,6 +95,18 @@ public class CharacterController : MonoBehaviour
         if(col.gameObject.CompareTag("Ground")){
             grounded = false;
             anim.SetBool("isFalling", true);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D col)
+    {
+        if(col.gameObject.CompareTag("Checkpoint")){
+            respawnPoint = transform.position;
+
+        }
+
+        if(col.gameObject.CompareTag("FallZone")){
+            transform.position = respawnPoint;
         }
     }
 }

@@ -24,6 +24,8 @@ public class Enemy : MonoBehaviour
     public float fireRate = 2f;
     private float nextFireTime = 0f;
     public GameObject explosionEffect;
+    private bool isQuitting = false;
+    public GameObject aggroIcon;
 
     void Start()
     {
@@ -118,6 +120,7 @@ public class Enemy : MonoBehaviour
     {
         if (Vector2.Distance(transform.position, player.position) <= detectionRadius)
         {
+            Instantiate(aggroIcon, firePoint.position, aggroIcon.transform.rotation);
             currentState = EnemyState.Attacking;
         }
     }
@@ -139,8 +142,17 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    void OnApplicationQuit()
+    {
+        isQuitting = true;
+    }
+
     void OnDestroy()
     {
-        Instantiate(explosionEffect, transform.position, transform.rotation);
+        if (!isQuitting)
+        {
+            Instantiate(explosionEffect, transform.position, transform.rotation);
+        }
     }
+
 }
