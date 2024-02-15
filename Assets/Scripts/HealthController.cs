@@ -6,6 +6,7 @@ public class HealthController : MonoBehaviour
 {
 
     public float Health = 100;
+    public float maxHealth = 100;
     
     public void damageTaken(float Increment)
     {
