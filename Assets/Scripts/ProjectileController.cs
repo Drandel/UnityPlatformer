@@ -61,6 +61,13 @@ public class ProjectileController : MonoBehaviour
             // Destroy the projectile
             explode();
             Destroy(gameObject);
+        } // Check if the projectile collides with ground
+        
+        if (other.gameObject.CompareTag("Bullet"))
+        {
+            // Destroy the projectile
+            explode();
+            Destroy(gameObject);
         }
     }
 

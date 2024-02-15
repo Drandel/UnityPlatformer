@@ -129,7 +129,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shootSound: {fileID: 8300000, guid: f10dd4d559c6fb546bc1317bb359520e, type: 3}
   hitSound: {fileID: 8300000, guid: f857d9bff09131f47806d34de5720862, type: 3}
+  alienHitSound: {fileID: 8300000, guid: 358651d0c4b9731428ed8c2afce5182a, type: 3}
   audioSource: {fileID: 0}
+  damage: 10
 --- !u!61 &228274801863972801
 BoxCollider2D:
   m_ObjectHideFlags: 0

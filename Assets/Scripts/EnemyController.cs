@@ -23,6 +23,7 @@ public class Enemy : MonoBehaviour
     public Transform firePoint;
     public float fireRate = 2f;
     private float nextFireTime = 0f;
+    public GameObject explosionEffect;
 
     void Start()
     {
@@ -136,5 +137,10 @@ public class Enemy : MonoBehaviour
             col.gameObject.GetComponent<HealthController>().damageTaken(damage);
             col.gameObject.GetComponent<CharacterController>().damageResponse(col.contacts[0].point);
         }
+    }
+
+    void OnDestroy()
+    {
+        Instantiate(explosionEffect, transform.position, transform.rotation);
     }
 }
