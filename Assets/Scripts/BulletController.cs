@@ -15,8 +15,10 @@ public class BulletController : MonoBehaviour
     private Collider2D coll;
     private SpriteRenderer spriteRenderer;
     public float damage = 10f;
+    public float maxLifeTime = 8f; 
 
     private void Start() {
+        StartCoroutine(DestroyAfterDelay(8f));
         rb = GetComponent<Rigidbody2D>();
         coll = GetComponent<Collider2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -57,6 +59,12 @@ public class BulletController : MonoBehaviour
             // Delayed destruction
             Destroy(gameObject, hitSound.length); // Destroy the GameObject after the sound finishes playing
         }
+    }
+
+     IEnumerator DestroyAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay); // Wait for the specified delay
+        Destroy(gameObject); // Destroy the bullet GameObject
     }
 }
 

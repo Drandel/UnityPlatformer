@@ -132,6 +132,7 @@ MonoBehaviour:
   alienHitSound: {fileID: 8300000, guid: 358651d0c4b9731428ed8c2afce5182a, type: 3}
   audioSource: {fileID: 0}
   damage: 10
+  maxLifeTime: 5
 --- !u!61 &228274801863972801
 BoxCollider2D:
   m_ObjectHideFlags: 0

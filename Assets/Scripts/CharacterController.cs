@@ -52,7 +52,6 @@ public class CharacterController : MonoBehaviour
         {
             anim.SetBool("isWalking", true);
             rb.AddForce(new Vector2(moveInput * walkAcceleration * Time.deltaTime,0.0f),ForceMode2D.Impulse);
-            // Debug.Log("Walk: " +  velocity.x);
         }
         else
         {
@@ -108,5 +107,13 @@ public class CharacterController : MonoBehaviour
         if(col.gameObject.CompareTag("FallZone")){
             transform.position = respawnPoint;
         }
+    }
+
+    public void dieAndRespawn()
+    {
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        rb.velocity = Vector2.zero;
+        transform.position = respawnPoint;
+        
     }
 }

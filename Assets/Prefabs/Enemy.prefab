@@ -261,8 +261,9 @@ MonoBehaviour:
   patrolSpeed: 2
   patrolRadius: 2.6
   detectionRadius: 4.64
+  engageRadius: 5
   pauseDuration: 2
-  damage: 100
+  damage: 50
   projectilePrefab: {fileID: 3094273435870399798, guid: 750d9b77ce9ab854c96ee2e7ac359ded, type: 3}
   firePoint: {fileID: 6440981251032595268}
   fireRate: 0.5
@@ -281,3 +282,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Health: 50
+  maxHealth: 100

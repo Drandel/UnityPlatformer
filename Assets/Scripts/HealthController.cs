@@ -6,14 +6,26 @@ public class HealthController : MonoBehaviour
 {
 
     public float Health = 100;
-    
-    public void damageTaken(float Increment)
+    public float maxHealth = 100;
+
+    private void Update() {
+        if(Health <= 0) terminal();
+    }
+
+    public float damageTaken(float Increment)
     {
         Health -= Increment;
-        if(Health < 0) terminal();
+        return Health;
     }
 
     private void terminal(){
-        Destroy(gameObject);
+        if(gameObject.CompareTag("Player")){
+            CharacterController characterController = GetComponent<CharacterController>();
+            characterController.dieAndRespawn();
+            Health = maxHealth;
+        } else {
+            Destroy(gameObject);
+        }
+        
     }
 }
