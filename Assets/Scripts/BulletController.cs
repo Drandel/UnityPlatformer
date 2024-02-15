@@ -8,6 +8,7 @@ public class BulletController : MonoBehaviour
 {   
     public AudioClip shootSound;
     public AudioClip hitSound;
+    public AudioClip alienHitSound;
     public AudioSource audioSource;
     private bool hasHit = false;
     private Rigidbody2D rb;
@@ -38,11 +39,24 @@ public class BulletController : MonoBehaviour
             Destroy(gameObject, hitSound.length); // Destroy the GameObject after the sound finishes playing
         }
 
-         if (!hasHit && other.gameObject.CompareTag("Enemy")){
+        if (!hasHit && other.gameObject.CompareTag("Missile"))
+        {
+            Destroy(gameObject);
+        }
+
+        if (!hasHit && other.gameObject.CompareTag("Enemy")){
             HealthController enemyHealth = other.gameObject.GetComponent<HealthController>();
             enemyHealth.damageTaken(damage);
-            Destroy(gameObject);
-         }
+            audioSource.PlayOneShot(alienHitSound);
+            hasHit = true;
+            rb.velocity = Vector2.zero; // Stop the bullet's movement
+            coll.enabled = false; // Disable the collider
+            spriteRenderer.enabled = false; // Disable the sprite renderer
+            // Optionally, you can also add particle effects, visual effects, or other actions here
+            
+            // Delayed destruction
+            Destroy(gameObject, hitSound.length); // Destroy the GameObject after the sound finishes playing
+        }
     }
 }
 
