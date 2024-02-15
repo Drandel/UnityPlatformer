@@ -102,7 +102,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 4
   rotateSpeed: 200
-  damage: 10
+  damage: 25
   target: {fileID: 0}
   explosionEffect: {fileID: 1828176872806910, guid: 64891a0eb28db934898420d80ca07cb3, type: 3}
   missileSound: {fileID: 8300000, guid: b80961360cf590a4c85a37510583a94e, type: 3}
@@ -190,7 +190,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0.18
+  m_Volume: 0.075
   m_Pitch: 0.63
   Loop: 0
   Mute: 0

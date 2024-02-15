@@ -1,10 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class ProjectileController : MonoBehaviour
@@ -46,8 +40,6 @@ public class ProjectileController : MonoBehaviour
         // // Check if the projectile collides with something
         if (other.gameObject.CompareTag("Player"))
         {
-            // ToDo Deal damage to the player and explode
-            // Destroy the projectile
             other.gameObject.GetComponent<HealthController>().damageTaken(damage);
             other.gameObject.GetComponent<CharacterController>().damageResponse(other.contacts[0].point);
             explode();
@@ -55,17 +47,14 @@ public class ProjectileController : MonoBehaviour
             Destroy(gameObject);
         }
 
-        // Check if the projectile collides with ground
         if (other.gameObject.CompareTag("Ground"))
         {
-            // Destroy the projectile
             explode();
             Destroy(gameObject);
-        } // Check if the projectile collides with ground
+        }
         
         if (other.gameObject.CompareTag("Bullet"))
         {
-            // Destroy the projectile
             explode();
             Destroy(gameObject);
         }
