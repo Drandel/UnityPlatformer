@@ -25,7 +25,7 @@ public class UfoController : MonoBehaviour
 
     void OnDestroy()
     {
-        if (!isQuitting)
+        if (!isQuitting && !PauseMenuController.IsPaused)
         {
             Instantiate(explosionEffect, transform.position, transform.rotation);
         }
