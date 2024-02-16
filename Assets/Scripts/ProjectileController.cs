@@ -40,8 +40,11 @@ public class ProjectileController : MonoBehaviour
         // // Check if the projectile collides with something
         if (other.gameObject.CompareTag("Player"))
         {
-            other.gameObject.GetComponent<HealthController>().damageTaken(damage);
-            other.gameObject.GetComponent<CharacterController>().damageResponse(other.contacts[0].point);
+            float remainingHealth = other.gameObject.GetComponent<HealthController>().damageTaken(damage);
+
+            if(remainingHealth > 0){
+                other.gameObject.GetComponent<CharacterController>().damageResponse(other.contacts[0].point);
+            }
             explode();
 
             Destroy(gameObject);

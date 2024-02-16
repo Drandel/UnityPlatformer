@@ -7,6 +7,7 @@ public class Enemy : MonoBehaviour
     public float patrolSpeed = 2f;
     public float patrolRadius = 10f;
     public float detectionRadius = 5f;
+    public float engageRadius = 5f;
     public float pauseDuration = 2f;
 
     private Transform player;
@@ -71,6 +72,7 @@ public class Enemy : MonoBehaviour
                         Shoot();
                         nextFireTime = Time.time + 1f / fireRate;
                     }
+                    CheckStillEngaged();
                     yield return null;
                     break;
             }
@@ -125,13 +127,24 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    void CheckStillEngaged()
+    {
+        if (Vector2.Distance(transform.position, player.position) >= engageRadius)
+        {
+            currentState = EnemyState.Patrolling;
+        }
+    }
+
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, patrolRadius);
 
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, detectionRadius);
+        Gizmos.DrawWireSphere(transform.position, detectionRadius);        
+        
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, engageRadius);
     }
     void OnCollisionEnter2D(Collision2D col)
     {
