@@ -21,7 +21,7 @@ public class HealthController : MonoBehaviour
     private void terminal(){
         if(gameObject.CompareTag("Player")){
             CharacterController characterController = GetComponent<CharacterController>();
-            characterController.dieAndRespawn();
+            characterController.DieAndRespawn();
             Health = maxHealth;
         } else {
             Destroy(gameObject);

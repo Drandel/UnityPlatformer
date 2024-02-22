@@ -7,8 +7,11 @@ using UnityEngine.SceneManagement;
 public class GameStateController : MonoBehaviour
 {
     private string currentLevel;
+    public int lifeCount = 3;
+    public GameObject music;
     private void Awake() {
         DontDestroyOnLoad(gameObject);
+        DontDestroyOnLoad(music);
     }
     void Start()
     {
