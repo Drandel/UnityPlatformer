@@ -19,6 +19,9 @@ public class CharacterController : MonoBehaviour
     private AudioSource audioSource;
     public AudioClip jumpSound;
     Vector3 respawnPoint;
+    public int lifeCount = 3;
+    private GameStateController gameState;
+    private PauseMenuController pauseController;
 
 
     void Start()
@@ -26,6 +29,8 @@ public class CharacterController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
+        gameState = GameObject.Find("GameState").GetComponent<GameStateController>();
+        pauseController = GameObject.Find("PauseCanvas").GetComponent<PauseMenuController>();
     }
 
     // Update is called once per frame
@@ -105,15 +110,23 @@ public class CharacterController : MonoBehaviour
         }
 
         if(col.gameObject.CompareTag("FallZone")){
-            transform.position = respawnPoint;
+            DieAndRespawn();
         }
     }
 
-    public void dieAndRespawn()
+    public void DieAndRespawn()
     {
-        Rigidbody2D rb = GetComponent<Rigidbody2D>();
-        rb.velocity = Vector2.zero;
-        transform.position = respawnPoint;
+        if(gameState.lifeCount > 0){
+            Rigidbody2D rb = GetComponent<Rigidbody2D>();
+            rb.velocity = Vector2.zero;
+            transform.position = respawnPoint;
+            gameState.lifeCount -= 1;
+        } else {
+            // game over
+            pauseController.Pause(true);
+            // Destroy(gameObject);
+        }
+        
         
     }
 }
