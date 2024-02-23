@@ -164,6 +164,7 @@ public class Enemy : MonoBehaviour
     {
         if (!isQuitting && !PauseMenuController.IsPaused)
         {
+            if(!gameObject.scene.isLoaded) return;
             Instantiate(explosionEffect, transform.position, transform.rotation);
         }
     }
