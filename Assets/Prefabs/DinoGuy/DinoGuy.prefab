@@ -47,6 +47,7 @@ GameObject:
   - component: {fileID: 3800374234319133508}
   - component: {fileID: 3527299088552251948}
   - component: {fileID: 8967430870408231852}
+  - component: {fileID: 8815155732374127560}
   m_Layer: 0
   m_Name: DinoGuy
   m_TagString: Player
@@ -62,7 +63,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2935381388336515741}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -4.63, y: -0.2, z: -18.599632}
   m_LocalScale: {x: 0.21334, y: 0.21334, z: 0.21334}
   m_ConstrainProportionsScale: 0
@@ -347,6 +348,23 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &8815155732374127560
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2935381388336515741}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81b6f9f5e73952d46ab395e53644b647, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 5545757107750147093}
+  colliderTags:
+  - Missile
+  - Enemy
+  flashSpeed: 0.25
 --- !u!1 &5875802215447401684
 GameObject:
   m_ObjectHideFlags: 0

@@ -4887,6 +4887,7 @@ GameObject:
   - component: {fileID: 7115512695503013974}
   - component: {fileID: 7135678646899048752}
   - component: {fileID: -7406417165203809729}
+  - component: {fileID: -10886263167922117}
   m_Layer: 0
   m_Name: ufo
   m_TagString: Enemy
@@ -5072,6 +5073,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   explosionEffect: {fileID: 1121192042590650, guid: e1b08032bec16ba4eb1ae23cbd572664, type: 3}
+  levelCompleteText: {fileID: 0}
+--- !u!114 &-10886263167922117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3058351527173538134}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81b6f9f5e73952d46ab395e53644b647, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 5367858605931263902}
+  colliderTags:
+  - Bullet
+  flashSpeed: 0.05
 --- !u!1 &3315112627728774268
 GameObject:
   m_ObjectHideFlags: 0
