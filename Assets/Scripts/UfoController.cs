@@ -33,7 +33,7 @@ public class UfoController : MonoBehaviour
         {
             Instantiate(explosionEffect, transform.position, transform.rotation);
             levelCompleteAnimation.ShowLevelComplete();
-            gameState.Level1Complete();
+            gameState.LevelComplete();
             // play fireworks
         }
     }

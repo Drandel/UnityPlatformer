@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class GameStateController : MonoBehaviour
 {
-    private string currentLevel;
+    private int currentLevel = 1;
     public int lifeCount = 3;
     public GameObject music;
     public GameObject levelCompleteText;
@@ -49,17 +49,19 @@ public class GameStateController : MonoBehaviour
         }
     }
 
-    public void Level1Complete()
+    public void LevelComplete()
     {
         StartCoroutine(WaitAndLoad());
     }
 
-    IEnumerator WaitAndLoad( )
+    IEnumerator WaitAndLoad()
     {
         // Wait for the specified amount of time
         yield return new WaitForSeconds(endOfLevelWaitTime);
 
         // Load the next scene
-        SceneManager.LoadScene("Level2");
+        Debug.Log(currentLevel);
+        SceneManager.LoadScene($"Level{currentLevel+1}");
+        currentLevel += 1;
     }
 }
