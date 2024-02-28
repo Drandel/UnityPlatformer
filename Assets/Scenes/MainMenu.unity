@@ -389,6 +389,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lifeCount: 3
   music: {fileID: 230116414}
+  levelCompleteText: {fileID: 0}
+  endOfLevelWaitTime: 8
 --- !u!4 &278621615
 Transform:
   m_ObjectHideFlags: 0

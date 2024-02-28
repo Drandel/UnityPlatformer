@@ -9,15 +9,36 @@ public class GameStateController : MonoBehaviour
     private string currentLevel;
     public int lifeCount = 3;
     public GameObject music;
+    public GameObject levelCompleteText;
+    public float endOfLevelWaitTime;
     private void Awake() {
         DontDestroyOnLoad(gameObject);
         DontDestroyOnLoad(music);
     }
+    // called first
+    void OnEnable()
+    {
+        Debug.Log("OnEnable called");
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    // called second
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        Debug.Log("OnSceneLoaded: " + scene.name);
+        Debug.Log(mode);
+
+        levelCompleteText = GameObject.Find("LevelCompleteText");
+
+        if(scene.name != "MainMenu"){
+            levelCompleteText.SetActive(false);
+        }
+    }
     void Start()
     {
         // Subscribe ChangedActiveScene method to the activeSceneChanged event
-        SceneManager.activeSceneChanged += ChangedActiveScene;
-        currentLevel = "MainMenu";
+        // SceneManager.activeSceneChanged += ChangedActiveScene;
+        // currentLevel = "MainMenu";
     }
 
     void Update()
@@ -28,16 +49,17 @@ public class GameStateController : MonoBehaviour
         }
     }
 
-    // This code runs when scene is changed
-    private void ChangedActiveScene(Scene current, Scene next)
+    public void Level1Complete()
     {
-        Debug.Log($"Current {currentLevel}");
-        Debug.Log($"Next {next.name}");
-        // Debug.Log("Scenes: " + currentLevel + " changed to " + next.name);
-        if(next.name == "MainMenu"){
-            //dont change current level
-        } else {
-            currentLevel = next.name;
-        }
+        StartCoroutine(WaitAndLoad());
+    }
+
+    IEnumerator WaitAndLoad( )
+    {
+        // Wait for the specified amount of time
+        yield return new WaitForSeconds(endOfLevelWaitTime);
+
+        // Load the next scene
+        SceneManager.LoadScene("Level2");
     }
 }

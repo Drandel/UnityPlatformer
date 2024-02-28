@@ -13,7 +13,10 @@ public class PauseMenuController : MonoBehaviour
     public Button resumeButton;
     public Button gameOverButton;
 
-    // Update is called once per frame
+    private void Awake() {
+        // DontDestroyOnLoad(gameObject);
+    }
+
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.Escape)){

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Cinemachine.Utility;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Parallax : MonoBehaviour
@@ -8,18 +9,27 @@ public class Parallax : MonoBehaviour
     private float length, startpos;
     public GameObject cam;
     public float parallaxEffect;
+    public float BGHeight;
 
     void Start()
     {
         startpos = transform.position.x;
-        length = GetComponent<SpriteRenderer>().bounds.size.x;
+        length = GetComponentInChildren<SpriteRenderer>().bounds.size.x;
     }
 
     // Update is called once per frame
     void Update()
     {
-        float dist = cam.transform.position.x * parallaxEffect;
+       // Calculate the distance the camera has moved horizontally
+        float dist = (cam.transform.position.x - startpos) * parallaxEffect;
 
-        transform.position = new Vector3(startpos + dist, transform.position.y, transform.position.z);
+        // Move the background only along the X-axis, keeping Y and Z the same
+        transform.position = new Vector3(startpos + dist, BGHeight, transform.position.z);
+
+        // If the camera has moved past the background's length, adjust start position
+        if (Mathf.Abs(cam.transform.position.x - transform.position.x) >= length)
+        {
+            startpos += Mathf.Sign(cam.transform.position.x - transform.position.x) * length;
+        }
     }
 }

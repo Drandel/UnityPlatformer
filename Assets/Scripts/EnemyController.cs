@@ -27,6 +27,11 @@ public class Enemy : MonoBehaviour
     public GameObject explosionEffect;
     private bool isQuitting = false;
     public GameObject aggroIcon;
+    public float gravity = 9.8f; // Gravity strength
+    public float groundDistance = 0.1f; // Distance to check for ground
+    public LayerMask groundMask; // Layer mask for the ground objects
+    public bool isGrounded; // Flag to check if the object is grounded
+    public float gravityMultiplier = 1f; // Optional gravity multiplier
 
     void Start()
     {
@@ -39,6 +44,25 @@ public class Enemy : MonoBehaviour
 
         currentState = EnemyState.Patrolling;
         StartCoroutine(StateMachine());
+    }
+
+    private void FixedUpdate() 
+    {
+        ApplyGravity(); // Apply gravity in FixedUpdate
+    }
+
+    private void ApplyGravity()
+    {
+        // Check if the object is grounded
+        isGrounded = Physics2D.Raycast(transform.position, -transform.up, groundDistance, groundMask);
+
+        // Apply gravity if not grounded
+        if (!isGrounded)
+        {
+            // Apply gravity force
+            Vector3 gravityForce = -transform.up * gravity * gravityMultiplier;
+            rb.AddForce(gravityForce, ForceMode2D.Force);
+        }
     }
 
     IEnumerator StateMachine()
@@ -64,8 +88,6 @@ public class Enemy : MonoBehaviour
                     // Add logic for attacking
                     anim.SetBool("isWalking", false);
                     rb.velocity = Vector2.zero; // Stop movement when attacking
-
-                    
 
                     if (Time.time >= nextFireTime)
                     {
@@ -97,26 +119,41 @@ public class Enemy : MonoBehaviour
     }
 
     IEnumerator Patrol()
+{
+    while (currentState == EnemyState.Patrolling)
     {
-        while (currentState == EnemyState.Patrolling)
+        Vector2 targetPoint = movingRight ? rightPoint : leftPoint;
+        targetPoint.y = transform.position.y;
+
+        // Calculate move direction without gravity
+        Vector2 moveDirection = (targetPoint - (Vector2)transform.position).normalized;
+
+        // Apply gravity
+        Vector2 gravityForce = Vector2.down * gravity * Time.deltaTime;
+        moveDirection += gravityForce;
+
+        // Normalize the move direction again after applying gravity
+        moveDirection.Normalize();
+
+        // Calculate the total velocity including both movement and gravity
+        Vector2 totalVelocity = moveDirection * patrolSpeed;
+
+        // Move the enemy
+        rb.velocity = totalVelocity;
+
+        float distanceToTarget = Vector2.Distance(transform.position, targetPoint);
+        if (distanceToTarget < 0.1f)
         {
-            Vector2 targetPoint = movingRight ? rightPoint : leftPoint;
-            Vector2 moveDirection = (targetPoint - (Vector2)transform.position).normalized;
-            rb.velocity = moveDirection * patrolSpeed;
-
-            float distanceToTarget = Vector2.Distance(transform.position, targetPoint);
-            if (distanceToTarget < 0.1f)
-            {
-                rb.velocity = Vector2.zero;
-                currentState = EnemyState.Pausing;
-                movingRight = !movingRight;
-                yield break;
-            }
-
-            CheckForPlayer(); // Check for player during patrol
-            yield return null;
+            rb.velocity = Vector2.zero;
+            currentState = EnemyState.Pausing;
+            movingRight = !movingRight;
+            yield break;
         }
+
+        CheckForPlayer(); // Check for player during patrol
+        yield return null;
     }
+}
 
     void CheckForPlayer()
     {
@@ -164,6 +201,7 @@ public class Enemy : MonoBehaviour
     {
         if (!isQuitting && !PauseMenuController.IsPaused)
         {
+            if(!gameObject.scene.isLoaded) return;
             Instantiate(explosionEffect, transform.position, transform.rotation);
         }
     }
