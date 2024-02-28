@@ -88,12 +88,18 @@ public class CharacterController : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D col)
     {
-        // Debug.Log(col.gameObject.tag);
+        
+        //Debug.Log(col.gameObject.tag);
         if(col.gameObject.CompareTag("Ground")){
             grounded = true;
             anim.SetBool("isFalling", false);
         }
-    }
+        else if(col.gameObject.CompareTag("RocketPickup")){
+            Transform childTransform = transform.GetChild(1);
+            childTransform.GetComponent<Renderer>().enabled = true; 
+            Destroy(col.gameObject);
+        }
+    }  
 
     private void OnCollisionExit2D(Collision2D col) {
         if(col.gameObject.CompareTag("Ground")){
