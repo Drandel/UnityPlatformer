@@ -469,8 +469,8 @@ MonoBehaviour:
   firePoint: {fileID: 138807937624215522}
   bulletSpeed: 10
   left: 1
-  magSize: 15
-  bulletsLeft: 15
+  magSize: 20
+  bulletsLeft: 20
   reloadTime: 2
   AmmoTextGO: {fileID: 0}
   reloadTextGO: {fileID: 0}
