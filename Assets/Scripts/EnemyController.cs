@@ -7,6 +7,7 @@ public class Enemy : MonoBehaviour
     public float patrolSpeed = 2f;
     public float patrolRadius = 10f;
     public float detectionRadius = 5f;
+    public float maxDetectionHeight = 5f;
     public float engageRadius = 5f;
     public float pauseDuration = 2f;
 
@@ -32,6 +33,7 @@ public class Enemy : MonoBehaviour
     public LayerMask groundMask; // Layer mask for the ground objects
     public bool isGrounded; // Flag to check if the object is grounded
     public float gravityMultiplier = 1f; // Optional gravity multiplier
+    public bool shouldFlip = true;
 
     void Start()
     {
@@ -77,7 +79,7 @@ public class Enemy : MonoBehaviour
                     break;
                 case EnemyState.Pausing:
                     anim.SetBool("isWalking", false);
-
+                    CheckForPlayer();
                     yield return new WaitForSeconds(pauseDuration);
 
                     flipCharacter();
@@ -103,6 +105,7 @@ public class Enemy : MonoBehaviour
 
     private void flipCharacter()
     {
+        if(!shouldFlip) return;
         if(transform.rotation.eulerAngles.y == 180f){
             Vector3 rotation = new Vector3(transform.rotation.x, 0f, transform.rotation.z);
             transform.rotation = Quaternion.Euler(rotation);
@@ -157,10 +160,32 @@ public class Enemy : MonoBehaviour
 
     void CheckForPlayer()
     {
-        if (Vector2.Distance(transform.position, player.position) <= detectionRadius)
+        if (
+            Vector2.Distance(transform.position, player.position) <= detectionRadius &&
+            Mathf.Abs(player.position.y - transform.position.y)  <= maxDetectionHeight
+        )
         {
+            checkFacingPlayer();
             Instantiate(aggroIcon, firePoint.position, aggroIcon.transform.rotation);
             currentState = EnemyState.Attacking;
+        }
+    }
+
+    private void checkFacingPlayer()
+    {
+        if (player.position.x < transform.position.x)
+        {
+            //player is on left
+            if(transform.rotation.eulerAngles.y == 180f){ // face left
+                Vector3 rotation = new Vector3(transform.rotation.x, 0f, transform.rotation.z);
+                transform.rotation = Quaternion.Euler(rotation);
+            }
+        } else {
+            //player is on right
+            if(transform.rotation.eulerAngles.y == 0f){ //face right
+                Vector3 rotation = new Vector3(transform.rotation.x, 180f, transform.rotation.z);
+                transform.rotation = Quaternion.Euler(rotation);
+            }
         }
     }
 
@@ -182,6 +207,9 @@ public class Enemy : MonoBehaviour
         
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, engageRadius);
+
+        Gizmos.color = Color.green;
+        Gizmos.DrawLine(transform.position, transform.position + Vector3.up * maxDetectionHeight);
     }
     void OnCollisionEnter2D(Collision2D col)
     {

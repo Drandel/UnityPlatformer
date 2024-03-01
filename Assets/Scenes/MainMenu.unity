@@ -240,6 +240,7 @@ GameObject:
   m_Component:
   - component: {fileID: 230116416}
   - component: {fileID: 230116415}
+  - component: {fileID: 230116417}
   m_Layer: 0
   m_Name: Music
   m_TagString: Untagged
@@ -358,6 +359,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &230116417
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 230116414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4568c2759fcae6f4a9e4e26de9e2d7c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &278621613
 GameObject:
   m_ObjectHideFlags: 0
@@ -390,7 +403,7 @@ MonoBehaviour:
   lifeCount: 3
   music: {fileID: 230116414}
   levelCompleteText: {fileID: 0}
-  endOfLevelWaitTime: 8
+  endOfLevelWaitTime: 5
 --- !u!4 &278621615
 Transform:
   m_ObjectHideFlags: 0
@@ -5602,7 +5615,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4f104d7b0c52924ab6f2933f47cbe65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainScene: Trex
+  mainScene: Level1
 --- !u!1 &1078561002
 GameObject:
   m_ObjectHideFlags: 0

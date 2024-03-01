@@ -61,7 +61,7 @@ public class BulletController : MonoBehaviour
         }
     }
 
-     IEnumerator DestroyAfterDelay(float delay)
+    IEnumerator DestroyAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay); // Wait for the specified delay
         Destroy(gameObject); // Destroy the bullet GameObject
