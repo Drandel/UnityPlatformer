@@ -1231,7 +1231,7 @@ Transform:
   m_GameObject: {fileID: 183689459}
   serializedVersion: 2
   m_LocalRotation: {x: 0.0018089949, y: -0.0000047901553, z: 0.00000015887889, w: 0.99999845}
-  m_LocalPosition: {x: -4.979904, y: -0.093820155, z: -19.240053}
+  m_LocalPosition: {x: -4.3799047, y: 0.19617985, z: -19.240053}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -9943,7 +9943,7 @@ Transform:
   m_GameObject: {fileID: 1343545850}
   serializedVersion: 2
   m_LocalRotation: {x: 0.0018089949, y: -0.0000047901553, z: 0.00000015887889, w: 0.99999845}
-  m_LocalPosition: {x: -4.979904, y: -0.093820155, z: -19.240053}
+  m_LocalPosition: {x: -4.3799047, y: 0.19617985, z: -19.240053}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -86650,13 +86650,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2236694058593971573, guid: 4be0f0d1f9d39f64ba7f128d3ef8b2e2, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 2423604737531727734, guid: 4be0f0d1f9d39f64ba7f128d3ef8b2e2, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -4.98
+      value: -4.38
       objectReference: {fileID: 0}
     - target: {fileID: 2423604737531727734, guid: 4be0f0d1f9d39f64ba7f128d3ef8b2e2, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.13
+      value: 0.16
       objectReference: {fileID: 0}
     - target: {fileID: 2423604737531727734, guid: 4be0f0d1f9d39f64ba7f128d3ef8b2e2, type: 3}
       propertyPath: m_LocalPosition.z
@@ -86694,6 +86698,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: DinoGuy
       objectReference: {fileID: 0}
+    - target: {fileID: 2935381388336515741, guid: 4be0f0d1f9d39f64ba7f128d3ef8b2e2, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3722174052741651632, guid: 4be0f0d1f9d39f64ba7f128d3ef8b2e2, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 4240525455128332391, guid: 4be0f0d1f9d39f64ba7f128d3ef8b2e2, type: 3}
       propertyPath: AmmoTextGO
       value: 
@@ -86702,6 +86714,14 @@ PrefabInstance:
       propertyPath: reloadTextGO
       value: 
       objectReference: {fileID: 1299550056}
+    - target: {fileID: 5055168304268319292, guid: 4be0f0d1f9d39f64ba7f128d3ef8b2e2, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5875802215447401684, guid: 4be0f0d1f9d39f64ba7f128d3ef8b2e2, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
