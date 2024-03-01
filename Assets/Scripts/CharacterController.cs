@@ -19,7 +19,6 @@ public class CharacterController : MonoBehaviour
     private AudioSource audioSource;
     public AudioClip jumpSound;
     Vector3 respawnPoint;
-    public int lifeCount = 3;
     private GameStateController gameState;
     private PauseMenuController pauseController;
 

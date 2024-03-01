@@ -4,10 +4,11 @@ using System;
 
 public class DisplayNumber : MonoBehaviour
 {
-    public TextMeshPro numberText; // Assign this in the inspector
+    public GameObject numberTextGO; // Assign this in the inspector
+    private TextMeshProUGUI numberText; // Assign this in the inspector
     public GameObject livesTextGO; // Assign this in the inspector
     private TextMeshProUGUI livesText; // Assign this in the inspector
-    public GameObject gd;
+    public GameObject dinoGuy;
     private GameObject childObject;
     private float origanalWidth; 
     private float maxHealth;
@@ -15,10 +16,11 @@ public class DisplayNumber : MonoBehaviour
 
     void Start()
     {
-        numberText.text = gd.GetComponent<HealthController>().Health.ToString();
+        numberText = numberTextGO.GetComponent<TextMeshProUGUI>();
+        numberText.text = dinoGuy.GetComponent<HealthController>().Health.ToString();
         childObject = transform.GetChild(1).gameObject;
         origanalWidth = childObject.GetComponent<RectTransform>().sizeDelta.x;
-        maxHealth = gd.GetComponent<HealthController>().maxHealth;
+        maxHealth = dinoGuy.GetComponent<HealthController>().maxHealth;
         gameState = GameObject.Find("GameState").GetComponent<GameStateController>();
         livesText = livesTextGO.GetComponent<TextMeshProUGUI>();
         if(gameState == null){
@@ -28,11 +30,11 @@ public class DisplayNumber : MonoBehaviour
 
     void Update()
     {
-        float Health = gd.GetComponent<HealthController>().Health;
+        float Health = dinoGuy.GetComponent<HealthController>().Health;
         numberText.text = Health.ToString();
         float newWidth = origanalWidth * (Health / maxHealth);
         childObject.GetComponent<RectTransform>().sizeDelta = new Vector2(newWidth, childObject.GetComponent<RectTransform>().sizeDelta.y);
-        UpdateLivesRemaining();
+        if(gameState != null) UpdateLivesRemaining();
     }
 
     private void UpdateLivesRemaining()

@@ -58,7 +58,13 @@ public class FloatingPickup : MonoBehaviour
         if (other.CompareTag("Player") && !hasHit)
         {
             soundSource.PlayOneShot(sound);
+            //Fully Heal Player
+            HealthController hc = other.gameObject.GetComponent<HealthController>();
+            hc.Health = hc.maxHealth;
+
+            //Give extra life
             gameState.lifeCount += 1;
+
             hasHit = true;
             coll.enabled = false; // Disable the collider
             spriteRenderer.enabled = false; // Disable the sprite renderer

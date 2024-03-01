@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7613053478676369281}
   - component: {fileID: 8446000255527395570}
-  - component: {fileID: 8107797974162206502}
   m_Layer: 0
   m_Name: DinoArms
   m_TagString: Untagged
@@ -86,24 +85,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &8107797974162206502
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2247967635036095248}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd568862246ea05458b5c7a2ba781100, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  projectilePrefab: {fileID: 842098956810292547, guid: 2d30424f9c5faca4b86a0302420e204f, type: 3}
-  rb: {fileID: 0}
-  firePoint: {fileID: 5716278806605223974}
-  bulletSpeed: 20
-  count: 0
-  left: 1
 --- !u!1001 &1999014427433052203
 PrefabInstance:
   m_ObjectHideFlags: 0
