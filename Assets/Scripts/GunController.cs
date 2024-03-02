@@ -63,9 +63,15 @@ public class GunController : MonoBehaviour
                         LeanTween.scale(reloadTextGO, new Vector3(1.5f, 1.5f, 1.5f), reloadTextBounceSpeed)
                             .setEaseOutQuad();
                     });
-            }        
-
+            }    
+               
         }
+
+        if(Input.GetKey(KeyCode.R) && !reloading){
+            reloading = true;
+            reloadingText.text = "Reloading!";
+            StartCoroutine(ReloadGun());
+        } 
     }
 
     IEnumerator ReloadGun()

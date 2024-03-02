@@ -45,6 +45,9 @@ public class GameStateController : MonoBehaviour
         if (scene.name != "MainMenu")
         {
             levelCompleteText.SetActive(false);
+        } else {
+            lifeCount = 3;
+            currentLevel = 1;
         }
     }
 
