@@ -26,6 +26,9 @@ public class CharacterController : MonoBehaviour
     public bool walkDone = false;
     private float cutSceneStart;
     private bool AlieninPosition = false;
+    private bool isJumping = false;
+    private bool isTimerRunning = false;
+    private float airborneTime = 0f;
 
 
     void Start()
@@ -37,18 +40,21 @@ public class CharacterController : MonoBehaviour
         pauseController = GameObject.Find("PauseCanvas").GetComponent<PauseMenuController>();
     }
 
-    // Update is called once per frame
+    // Another attempt at fixed the "not grounded when should be bug". Basically resets isGrounded to true after 10 seconds of not being grounded
     void Update()
     {
-        
+        if (isJumping && !grounded)
+        {
+            airborneTime += Time.deltaTime;
+            Debug.Log(airborneTime);
+            if (airborneTime >= 10f) setGrounded(true);;
+        }
+        else airborneTime = 0f;
     }
 
     public void damageResponse(Vector2 contactPoint){
-        if (contactPoint.x > transform.position.x){
-            rb.AddForce(new Vector2(-damageKnockback,0.0f),ForceMode2D.Impulse);
-        }else if (contactPoint.x < transform.position.x){
-            rb.AddForce(new Vector2(damageKnockback,0.0f),ForceMode2D.Impulse);
-        }
+        float knockbackDirection = contactPoint.x > transform.position.x ? damageKnockback * -1 : damageKnockback;
+        rb.AddForce(new Vector2(knockbackDirection,0.0f),ForceMode2D.Impulse);
     }
 
     private void FixedUpdate(){ // using fixed update for physics reasons
@@ -56,7 +62,7 @@ public class CharacterController : MonoBehaviour
         float moveInput = Input.GetAxisRaw("Horizontal");
         
         handlePlayerLookDirection();
-
+        float moveInput = Input.GetAxisRaw("Horizontal");
 
         if (moveInput != 0)
         {
@@ -67,39 +73,35 @@ public class CharacterController : MonoBehaviour
         {
             anim.SetBool("isWalking", false);
         }
-        moveInput = Input.GetAxisRaw("Vertical");
-        if (moveInput != 0 && grounded)
+
+        bool jumpInput = Input.GetKey(KeyCode.Space);
+        if (jumpInput && grounded)
         {
             rb.AddForce(new Vector2(0.0f,1.0f) * jumpAcceleration, ForceMode2D.Impulse);
-            grounded = false;
-            anim.SetBool("isFalling", true);
+            setGrounded(false);
+            isJumping = true;
+            isTimerRunning = true;
             audioSource.PlayOneShot(jumpSound);
         }
       }else{
         runCutScene();
       }
+        
     }
 
     private void handlePlayerLookDirection()
     {
-
-        if(Camera.main.ScreenToWorldPoint(Input.mousePosition).x > transform.position.x){ // if moving right
-                // rotate character along y axis to face right
-                Vector3 rotation = new Vector3(transform.rotation.x, 0f, transform.rotation.z);
-                transform.rotation = Quaternion.Euler(rotation); 
-        } else if(Camera.main.ScreenToWorldPoint(Input.mousePosition).x < transform.position.x) { // moving left
-                // rotate character along y axis to face left
-                Vector3 rotation = new Vector3(transform.rotation.x, 180f, transform.rotation.z);
-                transform.rotation = Quaternion.Euler(rotation); 
-        }
+        float angle = Camera.main.ScreenToWorldPoint(Input.mousePosition).x > transform.position.x ? 0f : 180f;
+        Vector3 rotation = new Vector3(transform.rotation.x, angle, transform.rotation.z);
+        transform.rotation = Quaternion.Euler(rotation); 
     }
 
     void OnCollisionEnter2D(Collision2D col)
     {
         
         if(col.gameObject.CompareTag("Ground")){
-            grounded = true;
-            anim.SetBool("isFalling", false);
+            setGrounded(true);
+            isTimerRunning = false; // Reset timer when the player lands
         }
         else if(col.gameObject.CompareTag("RocketPickup")){
             Transform childTransform = transform.GetChild(1);
@@ -109,9 +111,17 @@ public class CharacterController : MonoBehaviour
     }  
 
     private void OnCollisionExit2D(Collision2D col) {
-        if(col.gameObject.CompareTag("Ground")){
-            grounded = false;
-            anim.SetBool("isFalling", true);
+        if(col.gameObject.CompareTag("Ground")) setGrounded(false);
+    }
+
+    // OnCollisionStay2D fires when the player is making continuous collision with something
+    // If this fires, and the collision target is the ground, we set grounded = true
+    // Had to add an "isJumping" flag to prevent this code from executing the same frame that the player jumps, resulting in a double jump
+    // This was the best fix I could come up with for a nasty bug that caused they player to be stuck in a state where they weren't grounded, even if they were flat on the ground. 
+    private void OnCollisionStay2D(Collision2D col) {
+        if(col.gameObject.CompareTag("Ground") && !isJumping){
+            isJumping = false;
+            setGrounded(true);
         }
     }
 
@@ -139,8 +149,11 @@ public class CharacterController : MonoBehaviour
             pauseController.Pause(true);
             // Destroy(gameObject);
         }
-        
-        
+    }
+
+    private void setGrounded(bool state){
+        grounded = state;
+        anim.SetBool("isFalling", !state);
     }
     public void BossCutScene(){
         cutScene = true;

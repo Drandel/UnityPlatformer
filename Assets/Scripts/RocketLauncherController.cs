@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class Launcher : MonoBehaviour
@@ -12,6 +13,8 @@ public class Launcher : MonoBehaviour
     private float fireRate = 5;
     private float shotTime = 0;
     public bool aquired = false;
+    private GameObject cooldownTextGO;
+    private TextMeshProUGUI cooldownText; // Assign this in the inspector
     
 
     public int count = 0;
@@ -23,6 +26,9 @@ public class Launcher : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         parentTransform = transform.parent;
         GetComponent<Renderer>().enabled = false;
+        cooldownTextGO = GameObject.Find("CooldownText");
+        cooldownText = cooldownTextGO.GetComponent<TextMeshProUGUI>();
+        cooldownText.text = "";
     }
     void Update(){
 
@@ -32,11 +38,15 @@ public class Launcher : MonoBehaviour
            nextShot = 0;
            shotTime = Time.time;
         }
+
         if(nextShot != -1){
-           nextShot = Time.time - shotTime;
-           if(nextShot > fireRate){
+            cooldownText.text = $"Next Rocket: {Mathf.RoundToInt(5 + (shotTime - Time.time))} sec";
+            nextShot = Time.time - shotTime;
+            if(nextShot > fireRate){
             nextShot = -1.0f;
-           } 
+            cooldownText.text = "";
+            // cooldown ends
+            } 
         }
     }
     void FixedUpdate()
@@ -81,8 +91,6 @@ public class Launcher : MonoBehaviour
         spawnGO.GetComponent<Rigidbody2D>().velocity = VectorAngle * rocketSpeed;
         Rigidbody2D parentRigidbody = transform.parent.GetComponent<Rigidbody2D>();
         parentRigidbody.AddForce(VectorAngle * -rocketKick,ForceMode2D.Impulse);
-
-        
     }
 }
 
