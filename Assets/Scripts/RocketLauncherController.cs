@@ -26,9 +26,12 @@ public class Launcher : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         parentTransform = transform.parent;
         GetComponent<Renderer>().enabled = false;
-        cooldownTextGO = GameObject.Find("CooldownText");
-        cooldownText = cooldownTextGO.GetComponent<TextMeshProUGUI>();
-        cooldownText.text = "";
+        if(GetComponent<Renderer>().enabled){
+            cooldownTextGO = GameObject.Find("CooldownText");
+            cooldownText = cooldownTextGO.GetComponent<TextMeshProUGUI>();
+            cooldownText.text = "";
+        }
+
     }
     void Update(){
 
@@ -45,7 +48,6 @@ public class Launcher : MonoBehaviour
             if(nextShot > fireRate){
             nextShot = -1.0f;
             cooldownText.text = "";
-            // cooldown ends
             } 
         }
     }

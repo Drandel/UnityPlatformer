@@ -2,11 +2,14 @@
 using UnityEngine;
 
 public class HealthController : MonoBehaviour
-
 {
-
     public float Health = 100;
     public float maxHealth = 100;
+    private GameStateController gameState;
+
+    private void Start() {
+        gameState = GameObject.Find("GameState").GetComponent<GameStateController>();
+    }
 
     private void Update() {
         if(Health <= 0) terminal();
@@ -24,6 +27,8 @@ public class HealthController : MonoBehaviour
             characterController.DieAndRespawn();
             Health = maxHealth;
         } else {
+            Debug.Log("Enemy killed!");
+            gameState.enemiesKilled ++;
             Destroy(gameObject);
         }
         

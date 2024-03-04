@@ -27,7 +27,6 @@ public class CharacterController : MonoBehaviour
     private float cutSceneStart;
     private bool AlieninPosition = false;
     private bool isJumping = false;
-    private bool isTimerRunning = false;
     private float airborneTime = 0f;
 
 
@@ -46,7 +45,6 @@ public class CharacterController : MonoBehaviour
         if (isJumping && !grounded)
         {
             airborneTime += Time.deltaTime;
-            Debug.Log(airborneTime);
             if (airborneTime >= 10f) setGrounded(true);;
         }
         else airborneTime = 0f;
@@ -80,7 +78,6 @@ public class CharacterController : MonoBehaviour
             rb.AddForce(new Vector2(0.0f,1.0f) * jumpAcceleration, ForceMode2D.Impulse);
             setGrounded(false);
             isJumping = true;
-            isTimerRunning = true;
             audioSource.PlayOneShot(jumpSound);
         }
       }else{
@@ -101,7 +98,6 @@ public class CharacterController : MonoBehaviour
         
         if(col.gameObject.CompareTag("Ground")){
             setGrounded(true);
-            isTimerRunning = false; // Reset timer when the player lands
         }
         else if(col.gameObject.CompareTag("RocketPickup")){
             Transform childTransform = transform.GetChild(1);

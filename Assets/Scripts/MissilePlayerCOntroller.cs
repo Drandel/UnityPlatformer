@@ -5,7 +5,6 @@ using UnityEngine;
 public class MissilePlayerCOntroller : MonoBehaviour
 {
     public GameObject explosionEffect;
-    bool isQuitting = false;
     public AudioClip shootSound;
     public AudioClip hitSound;
     public AudioClip alienHitSound;

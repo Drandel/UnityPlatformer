@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -13,6 +14,9 @@ public class GameStateController : MonoBehaviour
     public GameObject music;
     public GameObject levelCompleteText;
     public float endOfLevelWaitTime;
+    public int enemiesKilled = 0;
+    private float startTime;
+    private float endTime;
 
     private void Awake()
     {
@@ -44,6 +48,9 @@ public class GameStateController : MonoBehaviour
 
         if (scene.name != "MainMenu")
         {
+            if(scene.name == "Level 1"){
+                startTime = Time.time;
+            }
             levelCompleteText.SetActive(false);
         } else {
             lifeCount = 3;
@@ -54,7 +61,7 @@ public class GameStateController : MonoBehaviour
     void Update()
     {
         // if in level 1
-        if (SceneManager.GetActiveScene().name == "Trex")
+        if (SceneManager.GetActiveScene().name == "Level 1")
         {
             // Debug.Log("Level 1");
         }
@@ -71,7 +78,18 @@ public class GameStateController : MonoBehaviour
         // Wait for the specified amount of time
 
         // Load the next scene
-        SceneManager.LoadScene($"Level{currentLevel + 1}");
+        if(currentLevel < 3){
+            SceneManager.LoadScene($"Level{currentLevel + 1}");
+        } else {
+            endTime = Time.time;
+            SceneManager.LoadScene("Scoreboard");
+        }
+        
         currentLevel += 1;
+    }
+
+    public float getTimeSpent()
+    {
+        return (float)Math.Round(endTime-startTime, 2);
     }
 }
