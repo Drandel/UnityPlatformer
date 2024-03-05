@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 
@@ -26,15 +27,12 @@ public class Launcher : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         parentTransform = transform.parent;
         GetComponent<Renderer>().enabled = false;
-        if(GetComponent<Renderer>().enabled){
-            cooldownTextGO = GameObject.Find("CooldownText");
-            cooldownText = cooldownTextGO.GetComponent<TextMeshProUGUI>();
-            cooldownText.text = "";
-        }
+        cooldownTextGO = GameObject.Find("CooldownText");
+        cooldownText = cooldownTextGO.GetComponent<TextMeshProUGUI>();
+        cooldownText.text = "";
 
     }
     void Update(){
-
         if (Input.GetMouseButtonDown(1) && nextShot == -1.0f && GetComponent<Renderer>().enabled)
         {
            Shoot();
@@ -47,21 +45,17 @@ public class Launcher : MonoBehaviour
             nextShot = Time.time - shotTime;
             if(nextShot > fireRate){
             nextShot = -1.0f;
-            cooldownText.text = "";
+            cooldownText.text = "Next Rocket: Ready";
             } 
         }
     }
     void FixedUpdate()
     {
-        // Get the direction from the gun position to the mouse cursor
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector3 direction = mousePos - transform.position;
-        direction.z = 0f; // Make sure the direction is in the 2D plane
-
-        // Calculate the angle to rotate the gun
+        direction.z = 0f;
         float angle = (Mathf.Atan2(direction.y, Mathf.Abs(direction.x)))  * Mathf.Rad2Deg;
 
-        // Rotate the gun towards the mouse cursor
         handleArmLookDirection(angle);
     }
     private void handleArmLookDirection(float angle)
@@ -93,6 +87,11 @@ public class Launcher : MonoBehaviour
         spawnGO.GetComponent<Rigidbody2D>().velocity = VectorAngle * rocketSpeed;
         Rigidbody2D parentRigidbody = transform.parent.GetComponent<Rigidbody2D>();
         parentRigidbody.AddForce(VectorAngle * -rocketKick,ForceMode2D.Impulse);
+    }
+
+    internal void setCooldownText(string message)
+    {
+        cooldownText.text = message;
     }
 }
 

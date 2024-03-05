@@ -28,14 +28,13 @@ public class MissilePlayerCOntroller : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D other) {
         if (!hasHit && other.gameObject.CompareTag("Ground"))
         {
-            // Play the hit sound effect
             audioSource.PlayOneShot(hitSound);
             hasHit = true;
-            rb.velocity = Vector2.zero; // Stop the bullet's movement
-            coll.enabled = false; // Disable the collider
-            spriteRenderer.enabled = false; // Disable the sprite renderer
+            rb.velocity = Vector2.zero;
+            coll.enabled = false;
+            spriteRenderer.enabled = false;
             Instantiate(explosionEffect, transform.position, transform.rotation);
-            Destroy(gameObject, hitSound.length); // Destroy the GameObject after the sound finishes playing
+            Destroy(gameObject, hitSound.length);
         }
 
         if (!hasHit && other.gameObject.CompareTag("Missile"))
@@ -49,19 +48,19 @@ public class MissilePlayerCOntroller : MonoBehaviour
             enemyHealth.damageTaken(damage);
             audioSource.PlayOneShot(alienHitSound);
             hasHit = true;
-            rb.velocity = Vector2.zero; // Stop the bullet's movement
-            coll.enabled = false; // Disable the collider
-            spriteRenderer.enabled = false; // Disable the sprite renderer
+            rb.velocity = Vector2.zero; 
+            coll.enabled = false;
+            spriteRenderer.enabled = false; 
             Instantiate(explosionEffect, transform.position, transform.rotation);
-            Destroy(gameObject, hitSound.length); // Destroy the GameObject after the sound finishes playing
+            Destroy(gameObject, hitSound.length);
         }
     }
 
 
     IEnumerator DestroyAfterDelay(float delay)
     {
-        yield return new WaitForSeconds(delay); // Wait for the specified delay
-        Destroy(gameObject); // Destroy the bullet GameObject
+        yield return new WaitForSeconds(delay);
+        Destroy(gameObject);
     }
 }
 

@@ -4,10 +4,10 @@ using System;
 
 public class DisplayNumber : MonoBehaviour
 {
-    public GameObject numberTextGO; // Assign this in the inspector
-    private TextMeshProUGUI numberText; // Assign this in the inspector
-    public GameObject livesTextGO; // Assign this in the inspector
-    private TextMeshProUGUI livesText; // Assign this in the inspector
+    public GameObject numberTextGO;
+    private TextMeshProUGUI numberText;
+    public GameObject livesTextGO;
+    private TextMeshProUGUI livesText;
     public GameObject dinoGuy;
     private GameObject childObject;
     private float origanalWidth; 

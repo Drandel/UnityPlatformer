@@ -66,12 +66,9 @@ public class FloatingPickup : MonoBehaviour
             gameState.lifeCount += 1;
 
             hasHit = true;
-            coll.enabled = false; // Disable the collider
-            spriteRenderer.enabled = false; // Disable the sprite renderer
-            // Optionally, you can also add particle effects, visual effects, or other actions here
-            
-            // Delayed destruction
-            Destroy(gameObject, sound.length); // Destroy the GameObject after the sound finishes playing
+            coll.enabled = false;
+            spriteRenderer.enabled = false;
+            Destroy(gameObject, sound.length);
         }
     }
 }

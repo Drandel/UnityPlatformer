@@ -45,7 +45,7 @@ public class CharacterController : MonoBehaviour
         if (isJumping && !grounded)
         {
             airborneTime += Time.deltaTime;
-            if (airborneTime >= 10f) setGrounded(true);;
+            if (airborneTime >= 6f) setGrounded(true);;
         }
         else airborneTime = 0f;
     }
@@ -101,7 +101,8 @@ public class CharacterController : MonoBehaviour
         }
         else if(col.gameObject.CompareTag("RocketPickup")){
             Transform childTransform = transform.GetChild(1);
-            childTransform.GetComponent<Renderer>().enabled = true; 
+            childTransform.GetComponent<Renderer>().enabled = true;
+            childTransform.GetComponent<Launcher>().setCooldownText("Next Rocket: Ready");
             Destroy(col.gameObject);
         }
     }  

@@ -31,8 +31,7 @@ public class Scoreboard : MonoBehaviour
     {
         int livesRemainingPoints = (int)Math.Round(gameState.lifeCount * livesRemainingPointsMultiplier);
         int enemiesKilledPoints = (int)Math.Round(gameState.enemiesKilled * enemiesKilledPointsMultiplier);
-        // float timeSpentPoints = timeSpentPointsBase / (float)Math.Sqrt(gameState.getTimeSpent());
-        float timeSpentPoints = math.max(basePoints - gameState.getTimeSpent(), 0);
+        float timeSpentPoints = timeSpentPointsBase / (float)Math.Sqrt(gameState.getTimeSpent());
         return (int)Math.Round(livesRemainingPoints + enemiesKilledPoints + timeSpentPoints);
     }
 

@@ -2383,11 +2383,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e682ea4c0ce019d4e9391fad12dc7b98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  offset: {x: 0, y: 0, z: -10}
-  smoothing: 1.25
-  mainCamera: {fileID: 308646219}
-  edgeDistanceThreshold: 0.75
 --- !u!81 &308646218
 AudioListener:
   m_ObjectHideFlags: 0
@@ -148660,7 +148655,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3483515494450861451, guid: a4cdfe9a481dee74c8cc5829030b3644, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -31.53
+      value: -28.4
       objectReference: {fileID: 0}
     - target: {fileID: 3483515494450861451, guid: a4cdfe9a481dee74c8cc5829030b3644, type: 3}
       propertyPath: m_LocalPosition.y

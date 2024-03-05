@@ -11,6 +11,7 @@ public class MainMenu : MonoBehaviour
     void Start()
     {
         PauseMenuController.IsPaused = false;
+        Cursor.visible = true;
     }
 
     // Update is called once per frame
@@ -26,6 +27,5 @@ public class MainMenu : MonoBehaviour
 
     public void StartButton(){
         SceneManager.LoadScene(mainScene);
-        // SceneManager.LoadScene("Level3");
     }
 }

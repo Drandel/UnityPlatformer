@@ -1,4 +1,5 @@
 
+using System;
 using UnityEngine;
 
 public class HealthController : MonoBehaviour
@@ -27,8 +28,11 @@ public class HealthController : MonoBehaviour
             characterController.DieAndRespawn();
             Health = maxHealth;
         } else {
-            Debug.Log("Enemy killed!");
-            gameState.enemiesKilled ++;
+            try{
+                gameState.enemiesKilled ++;
+            } catch(Exception e){
+                Debug.LogError(e);
+            }
             Destroy(gameObject);
         }
         
