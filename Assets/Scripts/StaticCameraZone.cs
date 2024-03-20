@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class StaticCameraZone : MonoBehaviour
@@ -14,6 +15,7 @@ public class StaticCameraZone : MonoBehaviour
     private CinemachineVirtualCamera virtualCamera;
     private float originalOrthoSize;
     private Transform originalFollowTarget;
+    public GameObject CutSceneState;
 
     private void Start()
     {
@@ -34,9 +36,10 @@ public class StaticCameraZone : MonoBehaviour
             virtualCamera.Follow = null;
             Vector3 newPosition = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, virtualCamera.gameObject.transform.position.z);
             LeanTween.move(virtualCamera.gameObject, newPosition, transitionDuration);
-            LeanTween.value(gameObject, virtualCamera.m_Lens.OrthographicSize, 23f, transitionDuration)
+            LeanTween.value(gameObject, virtualCamera.m_Lens.OrthographicSize, 21f, transitionDuration)
                 .setEase(zoomCurve)
                 .setOnUpdate((float val) => virtualCamera.m_Lens.OrthographicSize = val);
+           CutSceneState.GetComponent<CutSceneState>().initCutScene();
         }
     }
 

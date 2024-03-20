@@ -21,6 +21,11 @@ public class CharacterController : MonoBehaviour
     Vector3 respawnPoint;
     private GameStateController gameState;
     private PauseMenuController pauseController;
+    public bool cutScene = false;
+    private float cutSceneWalkDistance = 30.0f;
+    public bool walkDone = false;
+    private float cutSceneStart;
+    private bool AlieninPosition = false;
 
 
     void Start()
@@ -47,8 +52,9 @@ public class CharacterController : MonoBehaviour
     }
 
     private void FixedUpdate(){ // using fixed update for physics reasons
+        if(!cutScene){
         float moveInput = Input.GetAxisRaw("Horizontal");
-
+        
         handlePlayerLookDirection();
 
 
@@ -69,6 +75,9 @@ public class CharacterController : MonoBehaviour
             anim.SetBool("isFalling", true);
             audioSource.PlayOneShot(jumpSound);
         }
+      }else{
+        runCutScene();
+      }
     }
 
     private void handlePlayerLookDirection()
@@ -88,7 +97,6 @@ public class CharacterController : MonoBehaviour
     void OnCollisionEnter2D(Collision2D col)
     {
         
-        //Debug.Log(col.gameObject.tag);
         if(col.gameObject.CompareTag("Ground")){
             grounded = true;
             anim.SetBool("isFalling", false);
@@ -133,5 +141,34 @@ public class CharacterController : MonoBehaviour
         }
         
         
+    }
+    public void BossCutScene(){
+        cutScene = true;
+        cutSceneStart = transform.position.x;
+        Vector3 rotation = new Vector3(transform.rotation.x, 0f, transform.rotation.z);
+        transform.rotation = Quaternion.Euler(rotation); 
+    }
+    private void runCutScene(){
+        
+        if(transform.position.x < cutSceneStart + cutSceneWalkDistance){
+        anim.SetBool("isWalking", true);
+        rb.AddForce(new Vector2(1 * walkAcceleration * Time.deltaTime,0.0f),ForceMode2D.Impulse);
+        }else if(!AlieninPosition){
+            walkDone = true;
+            anim.SetBool("isWalking", false);
+            anim.SetBool("isStatic", true);
+        }else{
+            anim.SetBool("isStatic", false);
+            anim.SetBool("isLookUp", true);
+        }
+        
+    }
+
+    public void lookUp(){
+        AlieninPosition = true;
+    }
+    public void endCutScene(){
+        cutScene = false;
+        anim.SetBool("isLookUp", false);
     }
 }

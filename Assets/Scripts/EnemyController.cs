@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
@@ -17,8 +18,9 @@ public class Enemy : MonoBehaviour
     private Vector2 rightPoint;
     private bool movingRight = false;
 
-    private enum EnemyState { Patrolling, Pausing, Attacking }
+    public enum EnemyState { Patrolling, Pausing, Attacking, Deploying }
     private EnemyState currentState;
+    public EnemyState startState = EnemyState.Patrolling;
     public float damage = 10f;
     Animator anim;
     public GameObject projectilePrefab;
@@ -44,7 +46,7 @@ public class Enemy : MonoBehaviour
         leftPoint = (Vector2)transform.position - Vector2.right * patrolRadius;
         rightPoint = (Vector2)transform.position + Vector2.right * patrolRadius;
 
-        currentState = EnemyState.Patrolling;
+        currentState =  startState;
         StartCoroutine(StateMachine());
     }
 
@@ -99,7 +101,13 @@ public class Enemy : MonoBehaviour
                     CheckStillEngaged();
                     yield return null;
                     break;
+            case EnemyState.Deploying:
+                    // Add logic for attacking
+                    anim.SetBool("isDeploying", true);
+                    yield return null;
+                    break;
             }
+
         }
     }
 
@@ -218,8 +226,18 @@ public class Enemy : MonoBehaviour
             col.gameObject.GetComponent<HealthController>().damageTaken(damage);
             col.gameObject.GetComponent<CharacterController>().damageResponse(col.contacts[0].point);
         }
+        if(col.gameObject.CompareTag("Ground")){
+            if(currentState == EnemyState.Deploying){
+                currentState = EnemyState.Attacking;
+            }
+        }
     }
 
+    public void Deploy()
+    {
+        currentState = EnemyState.Deploying;
+
+    }
     void OnApplicationQuit()
     {
         isQuitting = true;

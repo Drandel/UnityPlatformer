@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class AggroIconController : MonoBehaviour
 {
-    Vector3 startingScale =  new Vector3(0.01f, 0.01f, 0.01f);
-    Vector3 middleScale = new Vector3(0.9f, 0.9f, 0.9f);
-    Vector3 endingScale = new Vector3(0.4f, 0.4f, 0.4f);
+    public Vector3 startingScale =  new Vector3(0.01f, 0.01f, 0.01f);
+    public Vector3 middleScale = new Vector3(0.9f, 0.9f, 0.9f);
+    public Vector3 endingScale = new Vector3(0.4f, 0.4f, 0.4f);
     public float fraction = 0;
     public float fraction2 = 0;
     public float speed = 0.5f;

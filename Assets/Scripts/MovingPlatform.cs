@@ -18,10 +18,9 @@ public class MovingPlatform : MonoBehaviour
         endPosition = startPosition + Vector3.up * moveHeight;
 
         // Start the movement
-        MovePlatform();
     }
 
-    private void MovePlatform()
+    public void MovePlatform()
     {
         // Move the platform up and down infinitely using LeanTween
         if (movingUp)
