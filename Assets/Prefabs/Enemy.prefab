@@ -151,6 +151,7 @@ GameObject:
   - component: {fileID: 842992772854384382}
   - component: {fileID: 5241830220571224413}
   - component: {fileID: 8866545337424462098}
+  - component: {fileID: 5859736906598672886}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Enemy
@@ -262,8 +263,10 @@ MonoBehaviour:
   patrolSpeed: 2
   patrolRadius: 1.25
   detectionRadius: 9.82
+  maxDetectionHeight: 5
   engageRadius: 15.03
   pauseDuration: 2
+  startState: 0
   damage: 50
   projectilePrefab: {fileID: 3094273435870399798, guid: 750d9b77ce9ab854c96ee2e7ac359ded, type: 3}
   firePoint: {fileID: 6440981251032595268}
@@ -277,6 +280,7 @@ MonoBehaviour:
     m_Bits: 8
   isGrounded: 0
   gravityMultiplier: 5
+  shouldFlip: 1
 --- !u!114 &5241830220571224413
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -308,3 +312,24 @@ MonoBehaviour:
   - Bullet
   - Missile
   flashSpeed: 0.05
+--- !u!95 &5859736906598672886
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9023779327899783232}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 7b8f5e0593b297a469598a6e454c7d37, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

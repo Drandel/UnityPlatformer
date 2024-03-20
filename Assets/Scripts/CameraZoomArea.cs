@@ -9,6 +9,7 @@ public class CameraZoomArea : MonoBehaviour
     public float defaultOrthoSize = 5f;
     public float smallerOrthoSize = 3f;
     public float transitionDuration = 0.5f;
+    public GameObject Boss;
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -18,6 +19,7 @@ public class CameraZoomArea : MonoBehaviour
                 .setOnUpdate((float value) => {
                     virtualCamera.m_Lens.OrthographicSize = value;
                 });
+            
         }
     }
 

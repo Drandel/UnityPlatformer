@@ -24,6 +24,8 @@ public class GunController : MonoBehaviour
     public float reloadTextBounceSpeed = 0.1f;
     private Vector3 originalReloadTextSize;
 
+    private GameObject body;
+
     void Start()
     {
         originalReloadTextSize = reloadTextGO.transform.position;
@@ -32,12 +34,13 @@ public class GunController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         ammoText.text = $"Ammo: {bulletsLeft}/{magSize}";
         reloadingText.text = "";
+        body = transform.parent.gameObject;
     }
     void Update(){
         ammoText.text = $"Ammo: {bulletsLeft}/{magSize}";
         reloadingText.text = reloading? "Reloading!" : "";
 
-        if (Input.GetMouseButtonDown(0) && !PauseMenuController.IsPaused)
+        if (Input.GetMouseButtonDown(0) && !PauseMenuController.IsPaused & !body.GetComponent<CharacterController>().cutScene)
         {
             if(bulletsLeft > 0 && !reloading)
             {
@@ -93,7 +96,13 @@ public class GunController : MonoBehaviour
     }
     private void handleArmLookDirection(float angle)
     {
-
+        if(body.GetComponent<CharacterController>().cutScene){
+                Vector3 rotation = new Vector3(transform.rotation.x,0,0);
+                transform.rotation = Quaternion.Euler(rotation); 
+                left = false;
+                return;
+        }
+        
         if(Camera.main.ScreenToWorldPoint(Input.mousePosition).x > transform.position.x){ // if moving right
                 // rotate character along y axis to face right
                 Vector3 rotation = new Vector3(transform.rotation.x,0,angle);
