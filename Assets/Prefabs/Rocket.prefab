@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 5398254056205425852}
   - component: {fileID: 8489896314333674971}
   - component: {fileID: 8226108488105650835}
-  - component: {fileID: -1432143001811642828}
   - component: {fileID: 228274801863972801}
   - component: {fileID: 4018043336423292288}
+  - component: {fileID: 4214938829229486229}
   m_Layer: 0
   m_Name: Rocket
   m_TagString: Bullet
@@ -115,24 +115,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &-1432143001811642828
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 842098956810292547}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d4115e4f563f21d47959677c0e7ab745, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  shootSound: {fileID: 8300000, guid: f10dd4d559c6fb546bc1317bb359520e, type: 3}
-  hitSound: {fileID: 8300000, guid: f857d9bff09131f47806d34de5720862, type: 3}
-  alienHitSound: {fileID: 8300000, guid: 358651d0c4b9731428ed8c2afce5182a, type: 3}
-  audioSource: {fileID: 0}
-  damage: 50
-  maxLifeTime: 5
 --- !u!61 &228274801863972801
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -187,8 +169,8 @@ AudioSource:
   m_GameObject: {fileID: 842098956810292547}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -5441038594892110042, guid: d570ff2918a84c141a3642c6493e4239, type: 2}
+  m_audioClip: {fileID: 8300000, guid: c6dbf535d4d78934aa1a1f3597c26f9a, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.285
   m_Pitch: 1
@@ -274,3 +256,22 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &4214938829229486229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 842098956810292547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17d1f75b67548a241a21edce53c9b0af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  explosionEffect: {fileID: 1828176872806910, guid: 64891a0eb28db934898420d80ca07cb3, type: 3}
+  shootSound: {fileID: 8300000, guid: c6dbf535d4d78934aa1a1f3597c26f9a, type: 3}
+  hitSound: {fileID: 8300000, guid: 52d32300ccd0e254b937a96395d3459d, type: 3}
+  alienHitSound: {fileID: 8300000, guid: 52d32300ccd0e254b937a96395d3459d, type: 3}
+  audioSource: {fileID: 4018043336423292288}
+  damage: 50
+  maxLifeTime: 8

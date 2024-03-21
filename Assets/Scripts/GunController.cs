@@ -13,14 +13,16 @@ public class GunController : MonoBehaviour
     public bool left = true;
     public int magSize = 25;
     public int bulletsLeft = 25;
-    public float reloadTime = 2f; // Time it takes to reload
+    public float reloadTime = 2f;
     private bool reloading = false;
     public GameObject AmmoTextGO;
     public GameObject reloadTextGO;
-    private TextMeshProUGUI ammoText; // Assign this in the inspector
-    private TextMeshProUGUI reloadingText; // Assign this in the inspector
+    private TextMeshProUGUI ammoText;
+    private TextMeshProUGUI reloadingText;
     public AudioSource audioSource;
     public AudioClip reloadSound;
+    public AudioClip reloadDoneSound;
+    
     public float reloadTextBounceSpeed = 0.1f;
     private Vector3 originalReloadTextSize;
 
@@ -42,9 +44,11 @@ public class GunController : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0) && !PauseMenuController.IsPaused & !body.GetComponent<CharacterController>().cutScene)
         {
+            SetColor();
             if(bulletsLeft > 0 && !reloading)
             {
                 bulletsLeft --;
+                SetColor();
                 Shoot();
             } 
             if(bulletsLeft == 0 && !reloading) {
@@ -52,10 +56,8 @@ public class GunController : MonoBehaviour
                 reloadingText.text = "Reloading!";
                 StartCoroutine(ReloadGun());
             }   
-            if(bulletsLeft == 0 && reloading) {
-                // play click sounds
+            if(bulletsLeft == 0 || reloading) {
                 audioSource.PlayOneShot(reloadSound);
-                // Add LeanTween effect to reloading text
                 LeanTween.scale(reloadTextGO, new Vector3(4f, 4f, 4f), reloadTextBounceSpeed)
                     .setEaseOutQuad()
                     .setOnComplete(() =>
@@ -63,35 +65,51 @@ public class GunController : MonoBehaviour
                         LeanTween.scale(reloadTextGO, new Vector3(1.5f, 1.5f, 1.5f), reloadTextBounceSpeed)
                             .setEaseOutQuad();
                     });
-            }        
+            }    
+               
+        }
 
+        if(Input.GetKey(KeyCode.R) && !reloading){
+            reloading = true;
+            reloadingText.text = "Reloading!";
+            StartCoroutine(ReloadGun());
+        } 
+    }
+
+    private void SetColor()
+    {
+        float percetBulletsLeft = (float)bulletsLeft/magSize;
+        if(percetBulletsLeft > .50){
+            ammoText.color = Color.white;
+        }
+        else if(percetBulletsLeft < .50 && percetBulletsLeft >= .25){
+            ammoText.color = Color.yellow;
+        }
+        else if(percetBulletsLeft < .25){
+            ammoText.color = Color.red;
         }
     }
 
     IEnumerator ReloadGun()
     {
-        // Set reloading flag to true
         reloading = true;
 
-        // Wait for reload time
         yield return new WaitForSeconds(reloadTime);
 
-        // Refill bullets and reset reloading flag
         bulletsLeft = magSize;
+        audioSource.PlayOneShot(reloadDoneSound);
         reloading = false;
+        SetColor();
     }
 
     void FixedUpdate()
     {
-        // Get the direction from the gun position to the mouse cursor
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector3 direction = mousePos - transform.position;
-        direction.z = 0f; // Make sure the direction is in the 2D plane
+        direction.z = 0f;
 
-        // Calculate the angle to rotate the gun
         float angle = Mathf.Atan2(direction.y, Mathf.Abs(direction.x)) * Mathf.Rad2Deg;
 
-        // Rotate the gun towards the mouse cursor
         handleArmLookDirection(angle);
     }
     private void handleArmLookDirection(float angle)

@@ -12,7 +12,7 @@ public class Enemy : MonoBehaviour
     public float engageRadius = 5f;
     public float pauseDuration = 2f;
 
-    private Transform player;
+    private GameObject player;
     private Rigidbody2D rb;
     private Vector2 leftPoint;
     private Vector2 rightPoint;
@@ -30,40 +30,44 @@ public class Enemy : MonoBehaviour
     public GameObject explosionEffect;
     private bool isQuitting = false;
     public GameObject aggroIcon;
-    public float gravity = 9.8f; // Gravity strength
-    public float groundDistance = 0.1f; // Distance to check for ground
-    public LayerMask groundMask; // Layer mask for the ground objects
-    public bool isGrounded; // Flag to check if the object is grounded
-    public float gravityMultiplier = 1f; // Optional gravity multiplier
+    public float gravity = 9.8f;
+    public float groundDistance = 0.1f;
+    public LayerMask groundMask;
+    public bool isGrounded;
+    public float gravityMultiplier = 1f;
     public bool shouldFlip = true;
 
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player").transform;
         anim = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody2D>();
 
         leftPoint = (Vector2)transform.position - Vector2.right * patrolRadius;
         rightPoint = (Vector2)transform.position + Vector2.right * patrolRadius;
 
-        currentState =  startState;
+        currentState = startState;
         StartCoroutine(StateMachine());
     }
 
-    private void FixedUpdate() 
+    private void FixedUpdate()
     {
-        ApplyGravity(); // Apply gravity in FixedUpdate
+        ApplyGravity();
+    }
+
+    private void Update()
+    {
+        if (player == null)
+        {
+            player = GameObject.FindWithTag("Player");
+        }
     }
 
     private void ApplyGravity()
     {
-        // Check if the object is grounded
         isGrounded = Physics2D.Raycast(transform.position, -transform.up, groundDistance, groundMask);
 
-        // Apply gravity if not grounded
         if (!isGrounded)
         {
-            // Apply gravity force
             Vector3 gravityForce = -transform.up * gravity * gravityMultiplier;
             rb.AddForce(gravityForce, ForceMode2D.Force);
         }
@@ -83,16 +87,12 @@ public class Enemy : MonoBehaviour
                     anim.SetBool("isWalking", false);
                     CheckForPlayer();
                     yield return new WaitForSeconds(pauseDuration);
-
                     flipCharacter();
-                
                     currentState = EnemyState.Patrolling;
                     break;
                 case EnemyState.Attacking:
-                    // Add logic for attacking
                     anim.SetBool("isWalking", false);
-                    rb.velocity = Vector2.zero; // Stop movement when attacking
-
+                    rb.velocity = Vector2.zero;
                     if (Time.time >= nextFireTime)
                     {
                         Shoot();
@@ -101,7 +101,7 @@ public class Enemy : MonoBehaviour
                     CheckStillEngaged();
                     yield return null;
                     break;
-            case EnemyState.Deploying:
+                case EnemyState.Deploying:
                     // Add logic for attacking
                     anim.SetBool("isDeploying", true);
                     yield return null;
@@ -113,15 +113,18 @@ public class Enemy : MonoBehaviour
 
     private void flipCharacter()
     {
-        if(!shouldFlip) return;
-        if(transform.rotation.eulerAngles.y == 180f){
+        if (!shouldFlip) return;
+        if (transform.rotation.eulerAngles.y == 180f)
+        {
             Vector3 rotation = new Vector3(transform.rotation.x, 0f, transform.rotation.z);
             transform.rotation = Quaternion.Euler(rotation);
-        } else {
+        }
+        else
+        {
             Vector3 rotation = new Vector3(transform.rotation.x, 180f, transform.rotation.z);
             transform.rotation = Quaternion.Euler(rotation);
         }
-        
+
     }
 
     void Shoot()
@@ -130,47 +133,42 @@ public class Enemy : MonoBehaviour
     }
 
     IEnumerator Patrol()
-{
-    while (currentState == EnemyState.Patrolling)
     {
-        Vector2 targetPoint = movingRight ? rightPoint : leftPoint;
-        targetPoint.y = transform.position.y;
-
-        // Calculate move direction without gravity
-        Vector2 moveDirection = (targetPoint - (Vector2)transform.position).normalized;
-
-        // Apply gravity
-        Vector2 gravityForce = Vector2.down * gravity * Time.deltaTime;
-        moveDirection += gravityForce;
-
-        // Normalize the move direction again after applying gravity
-        moveDirection.Normalize();
-
-        // Calculate the total velocity including both movement and gravity
-        Vector2 totalVelocity = moveDirection * patrolSpeed;
-
-        // Move the enemy
-        rb.velocity = totalVelocity;
-
-        float distanceToTarget = Vector2.Distance(transform.position, targetPoint);
-        if (distanceToTarget < 0.1f)
+        while (currentState == EnemyState.Patrolling)
         {
-            rb.velocity = Vector2.zero;
-            currentState = EnemyState.Pausing;
-            movingRight = !movingRight;
-            yield break;
-        }
+            Vector2 targetPoint = movingRight ? rightPoint : leftPoint;
+            targetPoint.y = transform.position.y;
 
-        CheckForPlayer(); // Check for player during patrol
-        yield return null;
+            Vector2 moveDirection = (targetPoint - (Vector2)transform.position).normalized;
+
+            Vector2 gravityForce = Vector2.down * gravity * Time.deltaTime;
+            moveDirection += gravityForce;
+
+            moveDirection.Normalize();
+
+            Vector2 totalVelocity = moveDirection * patrolSpeed;
+
+            rb.velocity = totalVelocity;
+
+            float distanceToTarget = Vector2.Distance(transform.position, targetPoint);
+            if (distanceToTarget < 0.1f)
+            {
+                rb.velocity = Vector2.zero;
+                currentState = EnemyState.Pausing;
+                movingRight = !movingRight;
+                yield break;
+            }
+
+            if (player != null) CheckForPlayer();
+            yield return null;
+        }
     }
-}
 
     void CheckForPlayer()
     {
         if (
-            Vector2.Distance(transform.position, player.position) <= detectionRadius &&
-            Mathf.Abs(player.position.y - transform.position.y)  <= maxDetectionHeight
+            Vector2.Distance(transform.position, player.transform.position) <= detectionRadius &&
+            Mathf.Abs(player.transform.position.y - transform.position.y) <= maxDetectionHeight
         )
         {
             checkFacingPlayer();
@@ -181,16 +179,20 @@ public class Enemy : MonoBehaviour
 
     private void checkFacingPlayer()
     {
-        if (player.position.x < transform.position.x)
+        if (player.transform.position.x < transform.position.x)
         {
             //player is on left
-            if(transform.rotation.eulerAngles.y == 180f){ // face left
+            if (transform.rotation.eulerAngles.y == 180f)
+            { // face left
                 Vector3 rotation = new Vector3(transform.rotation.x, 0f, transform.rotation.z);
                 transform.rotation = Quaternion.Euler(rotation);
             }
-        } else {
+        }
+        else
+        {
             //player is on right
-            if(transform.rotation.eulerAngles.y == 0f){ //face right
+            if (transform.rotation.eulerAngles.y == 0f)
+            { //face right
                 Vector3 rotation = new Vector3(transform.rotation.x, 180f, transform.rotation.z);
                 transform.rotation = Quaternion.Euler(rotation);
             }
@@ -199,7 +201,7 @@ public class Enemy : MonoBehaviour
 
     void CheckStillEngaged()
     {
-        if (Vector2.Distance(transform.position, player.position) >= engageRadius)
+        if (Vector2.Distance(transform.position, player.transform.position) >= engageRadius)
         {
             currentState = EnemyState.Patrolling;
         }
@@ -211,8 +213,8 @@ public class Enemy : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, patrolRadius);
 
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, detectionRadius);        
-        
+        Gizmos.DrawWireSphere(transform.position, detectionRadius);
+
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, engageRadius);
 
@@ -222,12 +224,15 @@ public class Enemy : MonoBehaviour
     void OnCollisionEnter2D(Collision2D col)
     {
         // Debug.Log(col.gameObject.tag);
-        if(col.gameObject.CompareTag("Player")){
+        if (col.gameObject.CompareTag("Player"))
+        {
             col.gameObject.GetComponent<HealthController>().damageTaken(damage);
             col.gameObject.GetComponent<CharacterController>().damageResponse(col.contacts[0].point);
         }
-        if(col.gameObject.CompareTag("Ground")){
-            if(currentState == EnemyState.Deploying){
+        if (col.gameObject.CompareTag("Ground"))
+        {
+            if (currentState == EnemyState.Deploying)
+            {
                 currentState = EnemyState.Attacking;
             }
         }
@@ -247,7 +252,7 @@ public class Enemy : MonoBehaviour
     {
         if (!isQuitting && !PauseMenuController.IsPaused)
         {
-            if(!gameObject.scene.isLoaded) return;
+            if (!gameObject.scene.isLoaded) return;
             Instantiate(explosionEffect, transform.position, transform.rotation);
         }
     }

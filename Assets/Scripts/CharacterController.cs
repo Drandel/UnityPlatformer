@@ -18,6 +18,7 @@ public class CharacterController : MonoBehaviour
     Animator anim;
     private AudioSource audioSource;
     public AudioClip jumpSound;
+    public AudioClip deathSound;
     Vector3 respawnPoint;
     private GameStateController gameState;
     private PauseMenuController pauseController;
@@ -26,6 +27,8 @@ public class CharacterController : MonoBehaviour
     public bool walkDone = false;
     private float cutSceneStart;
     private bool AlieninPosition = false;
+    private bool isJumping = false;
+    private float airborneTime = 0f;
 
 
     void Start()
@@ -37,137 +40,175 @@ public class CharacterController : MonoBehaviour
         pauseController = GameObject.Find("PauseCanvas").GetComponent<PauseMenuController>();
     }
 
-    // Update is called once per frame
+    // Another attempt at fixed the "not grounded when should be bug". Basically resets isGrounded to true after 10 seconds of not being grounded
     void Update()
     {
-        
-    }
-
-    public void damageResponse(Vector2 contactPoint){
-        if (contactPoint.x > transform.position.x){
-            rb.AddForce(new Vector2(-damageKnockback,0.0f),ForceMode2D.Impulse);
-        }else if (contactPoint.x < transform.position.x){
-            rb.AddForce(new Vector2(damageKnockback,0.0f),ForceMode2D.Impulse);
-        }
-    }
-
-    private void FixedUpdate(){ // using fixed update for physics reasons
-        if(!cutScene){
-        float moveInput = Input.GetAxisRaw("Horizontal");
-        
-        handlePlayerLookDirection();
-
-
-        if (moveInput != 0)
+        if (isJumping && !grounded)
         {
-            anim.SetBool("isWalking", true);
-            rb.AddForce(new Vector2(moveInput * walkAcceleration * Time.deltaTime,0.0f),ForceMode2D.Impulse);
+            airborneTime += Time.deltaTime;
+            if (airborneTime >= 6f) setGrounded(true); ;
+        }
+        else airborneTime = 0f;
+    }
+
+    public void damageResponse(Vector2 contactPoint)
+    {
+        float knockbackDirection = contactPoint.x > transform.position.x ? damageKnockback * -1 : damageKnockback;
+        rb.AddForce(new Vector2(knockbackDirection, 0.0f), ForceMode2D.Impulse);
+    }
+
+    private void FixedUpdate()
+    { // using fixed update for physics reasons
+        if (!cutScene)
+        {
+            handlePlayerLookDirection();
+            float moveInput = Input.GetAxisRaw("Horizontal");
+
+            if (moveInput != 0)
+            {
+                anim.SetBool("isWalking", true);
+                rb.AddForce(new Vector2(moveInput * walkAcceleration * Time.deltaTime, 0.0f), ForceMode2D.Impulse);
+            }
+            else
+            {
+                anim.SetBool("isWalking", false);
+            }
+
+            bool jumpInput = Input.GetKey(KeyCode.Space);
+            if (jumpInput && grounded)
+            {
+                rb.AddForce(new Vector2(0.0f, 1.0f) * jumpAcceleration, ForceMode2D.Impulse);
+                setGrounded(false);
+                isJumping = true;
+                audioSource.PlayOneShot(jumpSound);
+            }
         }
         else
         {
-            anim.SetBool("isWalking", false);
+            runCutScene();
         }
-        moveInput = Input.GetAxisRaw("Vertical");
-        if (moveInput != 0 && grounded)
-        {
-            rb.AddForce(new Vector2(0.0f,1.0f) * jumpAcceleration, ForceMode2D.Impulse);
-            grounded = false;
-            anim.SetBool("isFalling", true);
-            audioSource.PlayOneShot(jumpSound);
-        }
-      }else{
-        runCutScene();
-      }
+
     }
 
     private void handlePlayerLookDirection()
     {
-
-        if(Camera.main.ScreenToWorldPoint(Input.mousePosition).x > transform.position.x){ // if moving right
-                // rotate character along y axis to face right
-                Vector3 rotation = new Vector3(transform.rotation.x, 0f, transform.rotation.z);
-                transform.rotation = Quaternion.Euler(rotation); 
-        } else if(Camera.main.ScreenToWorldPoint(Input.mousePosition).x < transform.position.x) { // moving left
-                // rotate character along y axis to face left
-                Vector3 rotation = new Vector3(transform.rotation.x, 180f, transform.rotation.z);
-                transform.rotation = Quaternion.Euler(rotation); 
-        }
+        float angle = Camera.main.ScreenToWorldPoint(Input.mousePosition).x > transform.position.x ? 0f : 180f;
+        Vector3 rotation = new Vector3(transform.rotation.x, angle, transform.rotation.z);
+        transform.rotation = Quaternion.Euler(rotation);
     }
 
     void OnCollisionEnter2D(Collision2D col)
     {
-        
-        if(col.gameObject.CompareTag("Ground")){
-            grounded = true;
-            anim.SetBool("isFalling", false);
+
+        if (col.gameObject.CompareTag("Ground"))
+        {
+            setGrounded(true);
         }
-        else if(col.gameObject.CompareTag("RocketPickup")){
+        else if (col.gameObject.CompareTag("RocketPickup"))
+        {
             Transform childTransform = transform.GetChild(1);
-            childTransform.GetComponent<Renderer>().enabled = true; 
+            childTransform.GetComponent<Renderer>().enabled = true;
+            childTransform.GetComponent<Launcher>().SetCooldownText("Next Rocket: Ready");
             Destroy(col.gameObject);
         }
-    }  
+    }
 
-    private void OnCollisionExit2D(Collision2D col) {
-        if(col.gameObject.CompareTag("Ground")){
-            grounded = false;
-            anim.SetBool("isFalling", true);
+    private void OnCollisionExit2D(Collision2D col)
+    {
+        if (col.gameObject.CompareTag("Ground")) setGrounded(false);
+    }
+
+    // OnCollisionStay2D fires when the player is making continuous collision with something
+    // If this fires, and the collision target is the ground, we set grounded = true
+    // Had to add an "isJumping" flag to prevent this code from executing the same frame that the player jumps, resulting in a double jump
+    // This was the best fix I could come up with for a nasty bug that caused they player to be stuck in a state where they weren't grounded, even if they were flat on the ground. 
+    private void OnCollisionStay2D(Collision2D col)
+    {
+        if (col.gameObject.CompareTag("Ground") && !isJumping)
+        {
+            isJumping = false;
+            setGrounded(true);
         }
     }
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if(col.gameObject.CompareTag("Checkpoint")){
+        if (col.gameObject.CompareTag("Checkpoint"))
+        {
             respawnPoint = transform.position;
 
         }
 
-        if(col.gameObject.CompareTag("FallZone")){
+        if (col.gameObject.CompareTag("FallZone"))
+        {
             DieAndRespawn();
         }
     }
 
     public void DieAndRespawn()
     {
-        if(gameState.lifeCount > 0){
+        audioSource.PlayOneShot(deathSound);
+        if (gameState.lifeCount > 0)
+        {
+            HealthController hc = GetComponent<HealthController>();
+            hc.Health = hc.maxHealth;
             Rigidbody2D rb = GetComponent<Rigidbody2D>();
             rb.velocity = Vector2.zero;
             transform.position = respawnPoint;
             gameState.lifeCount -= 1;
-        } else {
-            // game over
-            pauseController.Pause(true);
-            // Destroy(gameObject);
+            try{
+                KillBoxScript kbs = GameObject.Find("KillBox").GetComponent<KillBoxScript>();
+                kbs.RunKillBox();
+            } catch(Exception){
+                Debug.Log("No Killbox script found");
+            }
         }
-        
-        
+        else
+        {
+            pauseController.Pause(true);
+        }
     }
-    public void BossCutScene(){
+
+    private void setGrounded(bool state)
+    {
+        grounded = state;
+        anim.SetBool("isFalling", !state);
+    }
+    public void BossCutScene()
+    {
         cutScene = true;
         cutSceneStart = transform.position.x;
         Vector3 rotation = new Vector3(transform.rotation.x, 0f, transform.rotation.z);
-        transform.rotation = Quaternion.Euler(rotation); 
+        transform.rotation = Quaternion.Euler(rotation);
     }
-    private void runCutScene(){
-        
-        if(transform.position.x < cutSceneStart + cutSceneWalkDistance){
-        anim.SetBool("isWalking", true);
-        rb.AddForce(new Vector2(1 * walkAcceleration * Time.deltaTime,0.0f),ForceMode2D.Impulse);
-        }else if(!AlieninPosition){
+    private void runCutScene()
+    {
+
+        if (transform.position.x < cutSceneStart + cutSceneWalkDistance)
+        {
+            anim.SetBool("isWalking", true);
+            rb.AddForce(new Vector2(1 * walkAcceleration * Time.deltaTime, 0.0f), ForceMode2D.Impulse);
+        }
+        else if (!AlieninPosition)
+        {
             walkDone = true;
             anim.SetBool("isWalking", false);
             anim.SetBool("isStatic", true);
-        }else{
+        }
+        else
+        {
             anim.SetBool("isStatic", false);
             anim.SetBool("isLookUp", true);
         }
-        
+
     }
 
-    public void lookUp(){
+    public void lookUp()
+    {
         AlieninPosition = true;
     }
-    public void endCutScene(){
+    public void endCutScene()
+    {
         cutScene = false;
         anim.SetBool("isLookUp", false);
     }

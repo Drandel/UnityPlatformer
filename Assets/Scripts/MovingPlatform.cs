@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class MovingPlatform : MonoBehaviour
 {
-    public float moveHeight = 5f; // Height the platform moves
-    public float moveSpeed = 2f; // Speed of movement
-    public float pauseDurationAtTop = 1f; // Pause duration at the top
-    public float pauseDurationAtBottom = 1f; // Pause duration at the bottom
+    public float moveHeight = 5f;
+    public float moveSpeed = 2f;
+    public float pauseDurationAtTop = 1f;
+    public float pauseDurationAtBottom = 1f;
 
     private Vector3 startPosition;
     private Vector3 endPosition;
@@ -13,16 +13,12 @@ public class MovingPlatform : MonoBehaviour
 
     private void Start()
     {
-        // Store start and end positions
         startPosition = transform.position;
         endPosition = startPosition + Vector3.up * moveHeight;
-
-        // Start the movement
     }
 
     public void MovePlatform()
     {
-        // Move the platform up and down infinitely using LeanTween
         if (movingUp)
         {
             LeanTween.move(gameObject, endPosition, moveSpeed).setOnComplete(() =>
@@ -47,10 +43,8 @@ public class MovingPlatform : MonoBehaviour
         }
     }
 
-    // Draw gizmos in the editor
     private void OnDrawGizmos()
     {
-        // Draw a line gizmo to visualize the movement height
         Gizmos.color = Color.green;
         Gizmos.DrawLine(transform.position, transform.position + Vector3.up * moveHeight);
     }

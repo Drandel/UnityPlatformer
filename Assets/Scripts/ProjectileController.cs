@@ -23,21 +23,15 @@ public class ProjectileController : MonoBehaviour
 
     private void FixedUpdate() {
 
-            Vector2 direction = (Vector2)target.position - rb.position;
-
-            direction.Normalize();
-
-            float rotationAmount = Vector3.Cross(direction, transform.right).z;
-
-            rb.angularVelocity = -rotationAmount * rotateSpeed;
-
-            rb.velocity = transform.right * speed;
-
+        Vector2 direction = (Vector2)target.position - rb.position;
+        direction.Normalize();
+        float rotationAmount = Vector3.Cross(direction, transform.right).z;
+        rb.angularVelocity = -rotationAmount * rotateSpeed;
+        rb.velocity = transform.right * speed;
     }
 
 
     private void OnCollisionEnter2D(Collision2D other) {
-        // // Check if the projectile collides with something
         if (other.gameObject.CompareTag("Player"))
         {
             float remainingHealth = other.gameObject.GetComponent<HealthController>().damageTaken(damage);
@@ -46,7 +40,6 @@ public class ProjectileController : MonoBehaviour
                 other.gameObject.GetComponent<CharacterController>().damageResponse(other.contacts[0].point);
             }
             explode();
-
             Destroy(gameObject);
         }
 

@@ -13,10 +13,6 @@ public class PauseMenuController : MonoBehaviour
     public Button resumeButton;
     public Button gameOverButton;
 
-    private void Awake() {
-        // DontDestroyOnLoad(gameObject);
-    }
-
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.Escape)){

@@ -16,12 +16,6 @@ public class UfoController : MonoBehaviour
         levelCompleteAnimation = levelCompleteText.GetComponent<LevelCompleteAnimation>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
      void OnApplicationQuit()
     {
         isQuitting = true;
