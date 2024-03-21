@@ -35,6 +35,8 @@ public class Boss : MonoBehaviour
     public GameObject levelCompleteText;
     private LevelCompleteAnimation levelCompleteAnimation;
     private GameStateController gameState;
+    public int initSpawns = 2;
+    private int shots = 0;
     void Start()
     {
         if (GameObject.Find("GameState") != null)
@@ -150,13 +152,14 @@ public class Boss : MonoBehaviour
 
         int firePointIndex = UnityEngine.Random.Range(0, firePoints.Count);
         Transform firePoint = firePoints[firePointIndex];
-        if (spawnPoints.Contains(firePointIndex))
+        if (spawnPoints.Contains(firePointIndex) | (shots <= initSpawns))
         {
             GameObject spawn = Instantiate(enemyPrefab, firePoint.position, Quaternion.identity);
             spawn.GetComponent<Enemy>().startState = Enemy.EnemyState.Deploying;
             spawn.GetComponent<Enemy>().detectionRadius = 100.0f;
             spawn.GetComponent<Enemy>().engageRadius = 100.0f;
             spawn.GetComponent<Rigidbody2D>().collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+            shots++;
         }
         else
         {
