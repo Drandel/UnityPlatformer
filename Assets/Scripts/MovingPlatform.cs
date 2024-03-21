@@ -15,9 +15,6 @@ public class MovingPlatform : MonoBehaviour
     {
         startPosition = transform.position;
         endPosition = startPosition + Vector3.up * moveHeight;
-
-        // Start the movement
-        MovePlatform();
     }
 
     public void MovePlatform()

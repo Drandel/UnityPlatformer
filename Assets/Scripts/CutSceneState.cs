@@ -14,7 +14,6 @@ public class CutSceneState : MonoBehaviour
     public GameObject Platform1;
     public GameObject Platform2;
     public GameObject BossMusic;
-    public GameObject InvisibleWall;
     private bool first = true;
     private float waitTime = 3.0f;
     private float startTime;
@@ -41,8 +40,6 @@ public class CutSceneState : MonoBehaviour
                 break;
             case 1:
                 if(first){
-
-                    Debug.Log("Start CutScnene");
                     Boss.GetComponent<Boss>().startCutSCene();
                     first = false;
                 }else if(Boss.GetComponent<Boss>().atStartPos){
@@ -55,7 +52,6 @@ public class CutSceneState : MonoBehaviour
                     Dino.GetComponent<CharacterController>().lookUp();
                     startTime = Time.time;
                     first=false;
-                    InvisibleWall.GetComponent<BoxCollider2D>().enabled = true;
                 }else if(Time.time - startTime >= waitTime){
                     Dino.GetComponent<CharacterController>().endCutScene();
                     Boss.GetComponent<Boss>().alert();

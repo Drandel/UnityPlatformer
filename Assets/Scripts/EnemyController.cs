@@ -12,7 +12,7 @@ public class Enemy : MonoBehaviour
     public float engageRadius = 5f;
     public float pauseDuration = 2f;
 
-    private Transform player;
+    private GameObject player;
     private Rigidbody2D rb;
     private Vector2 leftPoint;
     private Vector2 rightPoint;
@@ -39,20 +39,27 @@ public class Enemy : MonoBehaviour
 
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player").transform;
         anim = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody2D>();
 
         leftPoint = (Vector2)transform.position - Vector2.right * patrolRadius;
         rightPoint = (Vector2)transform.position + Vector2.right * patrolRadius;
 
-        currentState =  startState;
+        currentState = startState;
         StartCoroutine(StateMachine());
     }
 
-    private void FixedUpdate() 
+    private void FixedUpdate()
     {
         ApplyGravity();
+    }
+
+    private void Update()
+    {
+        if (player == null)
+        {
+            player = GameObject.FindWithTag("Player");
+        }
     }
 
     private void ApplyGravity()
@@ -94,7 +101,7 @@ public class Enemy : MonoBehaviour
                     CheckStillEngaged();
                     yield return null;
                     break;
-            case EnemyState.Deploying:
+                case EnemyState.Deploying:
                     // Add logic for attacking
                     anim.SetBool("isDeploying", true);
                     yield return null;
@@ -106,15 +113,18 @@ public class Enemy : MonoBehaviour
 
     private void flipCharacter()
     {
-        if(!shouldFlip) return;
-        if(transform.rotation.eulerAngles.y == 180f){
+        if (!shouldFlip) return;
+        if (transform.rotation.eulerAngles.y == 180f)
+        {
             Vector3 rotation = new Vector3(transform.rotation.x, 0f, transform.rotation.z);
             transform.rotation = Quaternion.Euler(rotation);
-        } else {
+        }
+        else
+        {
             Vector3 rotation = new Vector3(transform.rotation.x, 180f, transform.rotation.z);
             transform.rotation = Quaternion.Euler(rotation);
         }
-        
+
     }
 
     void Shoot()
@@ -123,42 +133,42 @@ public class Enemy : MonoBehaviour
     }
 
     IEnumerator Patrol()
-{
-    while (currentState == EnemyState.Patrolling)
     {
-        Vector2 targetPoint = movingRight ? rightPoint : leftPoint;
-        targetPoint.y = transform.position.y;
-
-        Vector2 moveDirection = (targetPoint - (Vector2)transform.position).normalized;
-
-        Vector2 gravityForce = Vector2.down * gravity * Time.deltaTime;
-        moveDirection += gravityForce;
-
-        moveDirection.Normalize();
-
-        Vector2 totalVelocity = moveDirection * patrolSpeed;
-
-        rb.velocity = totalVelocity;
-
-        float distanceToTarget = Vector2.Distance(transform.position, targetPoint);
-        if (distanceToTarget < 0.1f)
+        while (currentState == EnemyState.Patrolling)
         {
-            rb.velocity = Vector2.zero;
-            currentState = EnemyState.Pausing;
-            movingRight = !movingRight;
-            yield break;
-        }
+            Vector2 targetPoint = movingRight ? rightPoint : leftPoint;
+            targetPoint.y = transform.position.y;
 
-        CheckForPlayer();
-        yield return null;
+            Vector2 moveDirection = (targetPoint - (Vector2)transform.position).normalized;
+
+            Vector2 gravityForce = Vector2.down * gravity * Time.deltaTime;
+            moveDirection += gravityForce;
+
+            moveDirection.Normalize();
+
+            Vector2 totalVelocity = moveDirection * patrolSpeed;
+
+            rb.velocity = totalVelocity;
+
+            float distanceToTarget = Vector2.Distance(transform.position, targetPoint);
+            if (distanceToTarget < 0.1f)
+            {
+                rb.velocity = Vector2.zero;
+                currentState = EnemyState.Pausing;
+                movingRight = !movingRight;
+                yield break;
+            }
+
+            if (player != null) CheckForPlayer();
+            yield return null;
+        }
     }
-}
 
     void CheckForPlayer()
     {
         if (
-            Vector2.Distance(transform.position, player.position) <= detectionRadius &&
-            Mathf.Abs(player.position.y - transform.position.y)  <= maxDetectionHeight
+            Vector2.Distance(transform.position, player.transform.position) <= detectionRadius &&
+            Mathf.Abs(player.transform.position.y - transform.position.y) <= maxDetectionHeight
         )
         {
             checkFacingPlayer();
@@ -169,16 +179,20 @@ public class Enemy : MonoBehaviour
 
     private void checkFacingPlayer()
     {
-        if (player.position.x < transform.position.x)
+        if (player.transform.position.x < transform.position.x)
         {
             //player is on left
-            if(transform.rotation.eulerAngles.y == 180f){ // face left
+            if (transform.rotation.eulerAngles.y == 180f)
+            { // face left
                 Vector3 rotation = new Vector3(transform.rotation.x, 0f, transform.rotation.z);
                 transform.rotation = Quaternion.Euler(rotation);
             }
-        } else {
+        }
+        else
+        {
             //player is on right
-            if(transform.rotation.eulerAngles.y == 0f){ //face right
+            if (transform.rotation.eulerAngles.y == 0f)
+            { //face right
                 Vector3 rotation = new Vector3(transform.rotation.x, 180f, transform.rotation.z);
                 transform.rotation = Quaternion.Euler(rotation);
             }
@@ -187,7 +201,7 @@ public class Enemy : MonoBehaviour
 
     void CheckStillEngaged()
     {
-        if (Vector2.Distance(transform.position, player.position) >= engageRadius)
+        if (Vector2.Distance(transform.position, player.transform.position) >= engageRadius)
         {
             currentState = EnemyState.Patrolling;
         }
@@ -199,8 +213,8 @@ public class Enemy : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, patrolRadius);
 
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, detectionRadius);        
-        
+        Gizmos.DrawWireSphere(transform.position, detectionRadius);
+
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, engageRadius);
 
@@ -210,12 +224,15 @@ public class Enemy : MonoBehaviour
     void OnCollisionEnter2D(Collision2D col)
     {
         // Debug.Log(col.gameObject.tag);
-        if(col.gameObject.CompareTag("Player")){
+        if (col.gameObject.CompareTag("Player"))
+        {
             col.gameObject.GetComponent<HealthController>().damageTaken(damage);
             col.gameObject.GetComponent<CharacterController>().damageResponse(col.contacts[0].point);
         }
-        if(col.gameObject.CompareTag("Ground")){
-            if(currentState == EnemyState.Deploying){
+        if (col.gameObject.CompareTag("Ground"))
+        {
+            if (currentState == EnemyState.Deploying)
+            {
                 currentState = EnemyState.Attacking;
             }
         }
@@ -235,7 +252,7 @@ public class Enemy : MonoBehaviour
     {
         if (!isQuitting && !PauseMenuController.IsPaused)
         {
-            if(!gameObject.scene.isLoaded) return;
+            if (!gameObject.scene.isLoaded) return;
             Instantiate(explosionEffect, transform.position, transform.rotation);
         }
     }

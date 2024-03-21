@@ -28,8 +28,12 @@ public class Launcher : MonoBehaviour
         parentTransform = transform.parent;
         GetComponent<Renderer>().enabled = false;
         cooldownTextGO = GameObject.Find("CooldownText");
-        cooldownText = cooldownTextGO.GetComponent<TextMeshProUGUI>();
-        cooldownText.text = "";
+        try{
+            cooldownText = cooldownTextGO.GetComponent<TextMeshProUGUI>();
+            cooldownText.text = "";
+        } catch(Exception){
+            Debug.Log("No rocket cool down text");
+        }
 
     }
     void Update(){
@@ -38,6 +42,7 @@ public class Launcher : MonoBehaviour
            Shoot();
            nextShot = 0;
            shotTime = Time.time;
+           cooldownText.color = Color.red;
         }
 
         if(nextShot != -1){
@@ -46,6 +51,7 @@ public class Launcher : MonoBehaviour
             if(nextShot > fireRate){
             nextShot = -1.0f;
             cooldownText.text = "Next Rocket: Ready";
+            cooldownText.color = Color.white;
             } 
         }
     }
@@ -89,7 +95,7 @@ public class Launcher : MonoBehaviour
         parentRigidbody.AddForce(VectorAngle * -rocketKick,ForceMode2D.Impulse);
     }
 
-    internal void setCooldownText(string message)
+    internal void SetCooldownText(string message)
     {
         cooldownText.text = message;
     }

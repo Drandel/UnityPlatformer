@@ -20,6 +20,7 @@ public class Scoreboard : MonoBehaviour
 
     void Start()
     {
+        Cursor.visible = true;
         gameState = GameObject.Find("GameState").GetComponent<GameStateController>();
         livesRemainingText.text = $"Lives Remaining: {gameState.lifeCount}";
         EnemiesKilledText.text = $"Enemies Killed: {gameState.enemiesKilled}";

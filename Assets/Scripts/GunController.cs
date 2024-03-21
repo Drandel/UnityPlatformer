@@ -21,6 +21,8 @@ public class GunController : MonoBehaviour
     private TextMeshProUGUI reloadingText;
     public AudioSource audioSource;
     public AudioClip reloadSound;
+    public AudioClip reloadDoneSound;
+    
     public float reloadTextBounceSpeed = 0.1f;
     private Vector3 originalReloadTextSize;
 
@@ -42,9 +44,11 @@ public class GunController : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0) && !PauseMenuController.IsPaused & !body.GetComponent<CharacterController>().cutScene)
         {
+            SetColor();
             if(bulletsLeft > 0 && !reloading)
             {
                 bulletsLeft --;
+                SetColor();
                 Shoot();
             } 
             if(bulletsLeft == 0 && !reloading) {
@@ -52,7 +56,7 @@ public class GunController : MonoBehaviour
                 reloadingText.text = "Reloading!";
                 StartCoroutine(ReloadGun());
             }   
-            if(bulletsLeft == 0 && reloading) {
+            if(bulletsLeft == 0 || reloading) {
                 audioSource.PlayOneShot(reloadSound);
                 LeanTween.scale(reloadTextGO, new Vector3(4f, 4f, 4f), reloadTextBounceSpeed)
                     .setEaseOutQuad()
@@ -72,6 +76,20 @@ public class GunController : MonoBehaviour
         } 
     }
 
+    private void SetColor()
+    {
+        float percetBulletsLeft = (float)bulletsLeft/magSize;
+        if(percetBulletsLeft > .50){
+            ammoText.color = Color.white;
+        }
+        else if(percetBulletsLeft < .50 && percetBulletsLeft >= .25){
+            ammoText.color = Color.yellow;
+        }
+        else if(percetBulletsLeft < .25){
+            ammoText.color = Color.red;
+        }
+    }
+
     IEnumerator ReloadGun()
     {
         reloading = true;
@@ -79,7 +97,9 @@ public class GunController : MonoBehaviour
         yield return new WaitForSeconds(reloadTime);
 
         bulletsLeft = magSize;
+        audioSource.PlayOneShot(reloadDoneSound);
         reloading = false;
+        SetColor();
     }
 
     void FixedUpdate()
