@@ -46,6 +46,8 @@ public class GameStateController : MonoBehaviour
         } else {
             lifeCount = 3;
             currentLevel = 1;
+            enemiesKilled = 0;
+            startTime = Time.time;
         }
     }
 
