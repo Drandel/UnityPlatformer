@@ -7,11 +7,21 @@ public class MainMenu : MonoBehaviour
 {
     public string mainScene;
 
+    public AudioSource musicSource;
+
     // Start is called before the first frame update
     void Start()
     {
         PauseMenuController.IsPaused = false;
         Cursor.visible = true;
+
+        musicSource = GameObject.Find("Music").GetComponent<AudioSource>();
+
+        if (!musicSource.isPlaying)
+        {
+            musicSource.volume = .08f;
+            musicSource.Play();
+        }
     }
 
     // Update is called once per frame
